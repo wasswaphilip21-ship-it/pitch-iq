@@ -1,6 +1,20 @@
 // ===============================
 // 🔑 CONFIG
 // ===============================
+const CURRENT_SEASON = 2025; // This ensures 2025/26 data
+
+async function fetchStandings(leagueId = 39) {
+    const cacheKey = `standings_${leagueId}`;
+    const cached = getCache(cacheKey);
+    if (cached) return renderStandings(cached);
+
+    const res = await fetch(`${BASE_URL}/standings?league=${leagueId}&season=${CURRENT_SEASON}`, { headers: HEADERS });
+    const json = await res.json();
+    const data = json.response[0].league.standings[0];
+    
+    setCache(cacheKey, data, 60); // Cache for 1 hour
+    renderStandings(data);
+}
 const API_KEY = "35f0bfdd839466bf99892dc805c57b94";
 const BASE_URL = "https://v3.football.api-sports.io";
 const HEADERS = { "x-apisports-key": API_KEY };
