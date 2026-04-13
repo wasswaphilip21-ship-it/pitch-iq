@@ -1,25 +1,40 @@
 // ===============================
-// 🔑 UPDATED CONFIG FOR 2025/26
+// 🔑 CORE CONFIG - 2025/26 SEASON
 // ===============================
-const CURRENT_SEASON = 2025; // API-Sports uses 2025 for the 25/26 season
 const API_KEY = "35f0bfdd839466bf99892dc805c57b94";
+const BASE_URL = "https://v3.football.api-sports.io";
+const CURRENT_SEASON = 2025; // This gets the current 25/26 live data
+const HEADERS = { "x-apisports-key": API_KEY };
 
-// Update your fetch calls to use ${CURRENT_SEASON}
+const LEAGUE_MAP = {
+  epl: 39, laliga: 140, seriea: 135, bundesliga: 78,
+  ligue1: 61, ucl: 2, uel: 3, all: null
+};
+
+// ===============================
+// 🚀 DATA FETCHING
+// ===============================
+
 async function fetchMatches(date = null, leagueId = null) {
     const d = date || new Date().toISOString().split('T')[0];
-    const url = `${BASE_URL}/fixtures?date=${d}${leagueId ? `&league=${leagueId}` : ''}&season=${CURRENT_SEASON}`;
-    // ... rest of your fetch code
+    // Force the 2025 season in the URL
+    let url = `${BASE_URL}/fixtures?date=${d}&season=${CURRENT_SEASON}`;
+    if (leagueId) url += `&league=${leagueId}`;
+
+    try {
+        const res = await fetch(url, { headers: HEADERS });
+        const json = await res.json();
+        renderMatches(json.response || []);
+    } catch (err) {
+        console.error("Match fetch failed", err);
+    }
 }
 
-// Fix the Calendar highlights
-function updateCalendar(dates) {
-  const calDays = document.querySelectorAll(".cal-d");
-  const today = new Date();
-  calDays.forEach((day, i) => {
-    const d = new Date(today);
-    d.setDate(d.getDate() + (i - 2)); // Centers "Today"
-    const dateStr = d.toISOString().split("T")[0];
-    day.setAttribute('data-date', dateStr);
-    if (dates[dateStr]) day.classList.add("has");
-  });
-}
+// Initial Load
+document.addEventListener('DOMContentLoaded', () => {
+    fetchMatches(); // Loads today's matches for current season
+    // Update the calendar dates relative to today
+    if(window.updateCalendar) updateCalendar({}); 
+});
+
+// [Rest of your rendering functions like renderMatches, renderStandings, etc.]
