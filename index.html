@@ -1,172 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="PitchIQ — Smarter football. Live scores, lineups, AI predictions, transfer news and analysis.">
-<title>PitchIQ — Smarter Football</title>
-<!-- Google Analytics — replace GA_MEASUREMENT_ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GA_MEASUREMENT_ID');</script>
-<!-- AdSense — replace ca-pub-XXXXXXXXXXXXXXXX -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style><script src="api.js"></script>
-<script>
-    // FIX: Integrated SofaScore Loader
-    window.goTab = function(tabId, el) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        if(el) el.classList.add('active');
-        
-        const target = document.getElementById(tabId);
-        if(target) target.style.display = 'block';
+    </head>
+<body>
+    <script src="api.js"></script>
+    <script>
+        // 1. FIX: The Tab Switcher (Handles the SofaScore Table)
+        window.goTab = function(tabId, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            if(el) el.classList.add('active');
+            
+            const target = document.getElementById(tabId);
+            if(target) target.style.display = 'block';
 
-        if(tabId === 'table') {
-            // We use an iframe approach for stability - it prevents the "black screen" issue
-            target.innerHTML = `
-                <div style="width:100%; min-height:600px;">
-                    <iframe 
-                        id="sofascore-standings"
-                        src="https://www.sofascore.com/tournament/football/england/premier-league/17/standings/embed" 
-                        style="width:100%; height:800px; border:0; border-radius:12px; filter: invert(0.9) hue-rotate(180deg);"
-                        scrolling="no">
-                    </iframe>
-                </div>`;
-        }
-    };
+            // When user clicks 'Table', load the reliable iframe version
+            if(tabId === 'table') {
+                target.innerHTML = `
+                    <div style="width:100%; min-height:700px; background:var(--bg);">
+                        <iframe 
+                            id="sofascore-standings"
+                            src="https://www.sofascore.com/tournament/football/england/premier-league/17/standings/embed" 
+                            style="width:100%; height:800px; border:0; border-radius:12px; filter: invert(0.9) hue-rotate(180deg) brightness(0.8);"
+                            scrolling="no">
+                        </iframe>
+                    </div>`;
+            }
+        };
 
-    // League Switcher fix
-    window.fT = function(leagueKey) {
-        const leagueId = LEAGUE_MAP[leagueKey] || 39;
-        const sofaIdMap = { 'epl': 17, 'laliga': 8, 'seriea': 23, 'bundesliga': 35 };
-        
-        // Update API data
-        if(typeof fetchMatches === 'function') fetchMatches(null, leagueId);
-        
-        // Update Table if we are on the table tab
-        const tableFrame = document.getElementById('sofascore-standings');
-        if(tableFrame && sofaIdMap[leagueKey]) {
-            tableFrame.src = `https://www.sofascore.com/tournament/football/league/${sofaIdMap[leagueKey]}/standings/embed`;
-        }
-    };
-</script>
-:root{--bg:#07111f;--bg2:#0c1829;--bg3:#111f35;--card:#0f1c2e;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--green:#00e87a;--gdim:rgba(0,232,122,.1);--blue:#3b9eff;--amber:#ffb830;--red:#ff4455;--text:#eef2ff;--t2:rgba(238,242,255,.52);--t3:rgba(238,242,255,.26);--head:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:12px;--r2:8px;--r3:20px;}
-[data-theme="light"]{--bg:#f0f4fa;--bg2:#e8edf5;--bg3:#dde3ee;--card:#ffffff;--border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.13);--text:#0d1117;--t2:rgba(13,17,23,.55);--t3:rgba(13,17,23,.3);}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px;line-height:1.6;overflow-x:hidden;transition:background .2s,color .2s;}
-::-webkit-scrollbar{width:3px;height:3px;}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-button,input{font-family:var(--body);cursor:pointer;}
-/* COOKIE */
-#ckBanner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--bg2);border-top:0.5px solid var(--border2);padding:11px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-#ckBanner.hide{display:none;}
-.ck-text{flex:1;font-size:12px;color:var(--t2);min-width:180px;}
-.ck-text a{color:var(--green);}
-.ck-ok{padding:7px 18px;background:var(--green);color:#021a0b;font-size:12px;font-weight:600;border:none;border-radius:var(--r3);}
-.ck-no{padding:7px 14px;background:transparent;color:var(--t2);font-size:12px;border:0.5px solid var(--border2);border-radius:var(--r3);}
-/* TOPBAR */
-.topbar{position:sticky;top:0;z-index:200;background:rgba(7,17,31,.94);backdrop-filter:blur(20px);border-bottom:0.5px solid var(--border);height:54px;display:flex;align-items:center;padding:0 14px;gap:12px;}
-[data-theme="light"] .topbar{background:rgba(240,244,250,.96);}
-.logo{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.logo-mark{width:30px;height:30px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-.logo-name{font-family:var(--head);font-size:24px;color:var(--text);letter-spacing:1.5px;}
-.logo-name em{color:var(--green);font-style:normal;}
-.top-srch{flex:1;max-width:260px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r3);padding:6px 13px;}
-.top-srch input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%;}
-.top-srch input::placeholder{color:var(--t3);}
-.topbar-r{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.live-pill{display:flex;align-items:center;gap:5px;background:rgba(255,68,85,.12);border:0.5px solid rgba(255,68,85,.28);border-radius:var(--r3);padding:4px 10px;font-size:10px;font-weight:600;color:var(--red);letter-spacing:.4px;}
-.ldot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:blink 1.4s ease-in-out infinite;}
-@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
-.theme-btn{background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r3);padding:5px 11px;font-size:13px;color:var(--t2);}
-/* LEAGUE BAR */
-.lbar{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:8px 14px;display:flex;gap:6px;overflow-x:auto;}
-.lbar::-webkit-scrollbar{display:none;}
-.lp{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--r3);border:0.5px solid var(--border);color:var(--t2);font-size:12px;white-space:nowrap;transition:all .15s;flex-shrink:0;background:none;}
-.lp.on{background:var(--gdim);border-color:rgba(0,232,122,.28);color:var(--green);}
-/* CALENDAR */
-.cal{background:var(--bg);border-bottom:0.5px solid var(--border);padding:8px 14px;}
-.cal-hd{font-size:9px;color:var(--t3);letter-spacing:.9px;margin-bottom:6px;}
-.cal-days{display:flex;gap:4px;overflow-x:auto;}
-.cal-days::-webkit-scrollbar{display:none;}
-.cal-d{display:flex;flex-direction:column;align-items:center;padding:6px 9px;border-radius:10px;cursor:pointer;min-width:44px;gap:2px;border:0.5px solid transparent;transition:all .15s;}
-.cal-d.on{background:var(--gdim);border-color:rgba(0,232,122,.22);}
-.cal-dow{font-size:9px;color:var(--t3);}
-.cal-date{font-size:15px;font-weight:500;color:var(--t2);}
-.cal-d.on .cal-dow,.cal-d.on .cal-date{color:var(--green);}
-.cal-pip{width:4px;height:4px;border-radius:50%;background:var(--border2);}
-.cal-d.on .cal-pip{background:var(--green);}
-/* SEC TABS */
-.stabs{background:var(--bg);border-bottom:0.5px solid var(--border);display:flex;overflow-x:auto;position:sticky;top:54px;z-index:100;}
-.stabs::-webkit-scrollbar{display:none;}
-.stab{padding:10px 15px;font-size:12px;font-weight:500;color:var(--t3);white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;}
-.stab.on{color:var(--text);border-bottom-color:var(--green);}
-/* LAYOUT */
-.main{display:grid;grid-template-columns:1fr 310px;max-width:1180px;margin:0 auto;}
-@media(max-width:900px){.main{grid-template-columns:1fr;}.sidebar{display:none;}}
-.feed{padding:12px 13px;}
-.sidebar{padding:12px 13px;border-left:0.5px solid var(--border);}
-/* AD SLOT */
-.ad-slot{background:var(--bg3);border:0.5px dashed var(--border2);border-radius:var(--r2);padding:12px;text-align:center;margin-bottom:12px;font-size:10px;color:var(--t3);min-height:90px;display:flex;align-items:center;justify-content:center;}
-/* WC BANNER */
-.wc-banner{background:linear-gradient(120deg,rgba(59,158,255,.1),rgba(0,232,122,.07));border:0.5px solid rgba(59,158,255,.22);border-radius:var(--r);padding:14px 16px;margin-bottom:13px;display:flex;align-items:center;gap:13px;}
-.wc-body{flex:1;}
-.wc-eye{font-size:9px;color:var(--blue);letter-spacing:.9px;margin-bottom:3px;}
-.wc-title{font-family:var(--head);font-size:22px;color:var(--text);letter-spacing:.8px;}
-.wc-sub{font-size:11px;color:var(--t2);}
-.wc-cd{text-align:center;flex-shrink:0;}
-.wc-timer{font-family:var(--mono);font-size:19px;font-weight:500;color:var(--green);}
-.wc-cd-lbl{font-size:9px;color:var(--t3);margin-top:2px;}
-/* SAFE BET */
-.sb{background:linear-gradient(135deg,rgba(0,232,122,.07),rgba(0,232,122,.02));border:0.5px solid rgba(0,232,122,.22);border-radius:var(--r);padding:14px 15px;margin-bottom:13px;}
-.sb-eye{font-size:9px;color:var(--green);letter-spacing:.9px;font-weight:600;margin-bottom:5px;}
-.sb-match{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px;}
-.sb-reason{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:9px;}
-.sb-pill{display:inline-flex;align-items:center;background:var(--green);color:#021a0b;font-size:12px;font-weight:700;padding:5px 14px;border-radius:var(--r3);}
-.sb-disc{font-size:10px;color:var(--t3);margin-top:7px;}
-.sb-disc a{color:var(--t3);text-decoration:underline;}
-/* SHD */
-.shd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
-.shd-t{font-size:9px;color:var(--t3);letter-spacing:.9px;}
-.shd-a{font-size:11px;color:var(--green);cursor:pointer;}
-/* MATCH CARD */
-.mc{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .1s;}
-.mc:hover{border-color:var(--border2);transform:translateY(-1px);}
-.mc-lg{display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:9px;color:var(--t3);letter-spacing:.5px;border-bottom:0.5px solid var(--border);}
-.mc-lg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.mc-row{display:flex;align-items:center;padding:10px 12px;gap:8px;}
-.mc-min{font-size:10px;font-family:var(--mono);min-width:32px;text-align:center;}
-.mc-min.lv{color:var(--green);font-weight:600;}
-.mc-min.ft,.mc-min.up{color:var(--t3);}
-.mc-teams{flex:1;}
-.mc-team{display:flex;align-items:center;gap:8px;padding:2px 0;}
-.mc-badge{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
-.mc-tname{font-size:13px;font-weight:500;color:var(--text);}
-.mc-tname.dim{color:var(--t3);font-weight:400;}
-.mc-s{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:18px;}
-.mc-score{font-size:16px;font-weight:700;color:var(--text);font-family:var(--mono);}
-.mc-score.dim{color:var(--t3);}
-.mc-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
-.mc-pred{font-size:10px;background:var(--gdim);color:var(--green);padding:2px 8px;border-radius:8px;white-space:nowrap;}
-.mc-chev{color:var(--t3);}
-.mc-stats{display:flex;padding:7px 12px;border-top:0.5px solid var(--border);}
-.mc-stat{flex:1;text-align:center;}
-.mc-sv{font-size:12px;font-weight:500;color:var(--text);}
-.mc-sl{font-size:9px;color:var(--t3);margin-top:1px;}
-.mc-bar-row{display:flex;align-items:center;gap:8px;padding:2px 12px 8px;}
-.mc-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
-.mc-bar-f{height:3px;border-radius:2px;}
-.mc-bp{font-size:9px;color:var(--t3);min-width:24px;}
-.mc-bp.r{text-align:right;}
-/* PRED */
-.pc{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
-.pc-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:9px;}
-.pc-match{font-size:13px;font-weight:500;color:var(--text);}
-.pc-lg{font-size:10px;color:var(--t3);margin-top:1px;}
-.pc-chip{font-size:10px;font-weight:600;background:var(--gdim);color:var(--green);padding:3px 9px;border-radius:10px;white-space:nowrap;flex-shrink:0;}
-.prob-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.prob-lbl{font-size:11px;color:var(--t2);min-width:28px;}
-.prob-bar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
-.prob-fill{height:5px;
+        // 2. FIX: The League Switcher (Updates both Matches and Table)
+        window.fT = function(leagueKey) {
+            const leagueId = LEAGUE_MAP[leagueKey] || 39;
+            const sofaIdMap = { 'epl': 17, 'laliga': 8, 'seriea': 23, 'bundesliga': 35, 'ligue1': 34 };
+            
+            // Update the Matches Feed (API-Sports)
+            if(typeof fetchMatches === 'function') fetchMatches(null, leagueId);
+            
+            // Update the Table (SofaScore) if it exists
+            const tableFrame = document.getElementById('sofascore-standings');
+            if(tableFrame && sofaIdMap[leagueKey]) {
+                tableFrame.src = `https://www.sofascore.com/tournament/football/league/${sofaIdMap[leagueKey]}/standings/embed`;
+            }
+        };
+    </script>
+</body>
+</html>
