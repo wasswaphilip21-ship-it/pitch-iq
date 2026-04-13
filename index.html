@@ -1,46 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PitchIQ — Smarter Football</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #07111f; --bg2: #0c1829; --green: #00ff87; --t1: #ffffff; --t2: rgba(255,255,255,0.7); --border: rgba(255,255,255,0.1); }
+        body { background: var(--bg); color: var(--t1); font-family: 'DM Sans', sans-serif; margin: 0; overflow-x: hidden; }
+        .page { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .active-page { display: block; }
+        .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .tab-bar { position: fixed; bottom: 0; width: 100%; background: var(--bg2); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border); z-index: 100; }
+        .tab { color: var(--t2); font-size: 12px; text-align: center; cursor: pointer; }
+        .tab.active { color: var(--green); font-weight: bold; }
+        iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.8); background: transparent; }
+    </style>
+</head>
 <body>
+
+    <div style="padding: 20px; text-align: center; background: var(--bg2); border-bottom: 1px solid var(--border);">
+        <h1 style="font-family: 'Bebas Neue'; color: var(--green); margin: 0;">PITCHIQ</h1>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; overflow-x: auto; padding-bottom: 5px;">
+            <button onclick="fT('epl')" style="background:none; border:1px solid var(--green); color:white; padding:5px 10px; border-radius:20px;">EPL</button>
+            <button onclick="fT('laliga')" style="background:none; border:1px solid var(--border); color:white; padding:5px 10px; border-radius:20px;">La Liga</button>
+            <button onclick="fT('seriea')" style="background:none; border:1px solid var(--border); color:white; padding:5px 10px; border-radius:20px;">Serie A</button>
+        </div>
+    </div>
+
+    <div id="feed" class="page active-page">
+        <div id="matches-container">Loading today's matches...</div>
+    </div>
+
+    <div id="table" class="page">
+        <div id="table-container"></div>
+    </div>
+
+    <div id="transfers" class="page">
+        <div id="transfer-list">Loading transfer news...</div>
+    </div>
+
+    <div class="tab-bar">
+        <div class="tab active" onclick="goTab('feed', this)">Feed</div>
+        <div class="tab" onclick="goTab('table', this)">Table</div>
+        <div class="tab" onclick="goTab('transfers', this)">News</div>
+    </div>
+
     <script src="api.js"></script>
     <script>
-        // 1. FIX: The Tab Switcher (Handles the SofaScore Table)
-        window.goTab = function(tabId, el) {
+        function goTab(tabId, el) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-            if(el) el.classList.add('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            el.classList.add('active');
+            document.getElementById(tabId).classList.add('active-page');
             
-            const target = document.getElementById(tabId);
-            if(target) target.style.display = 'block';
+            if(tabId === 'table') loadSofaTable('epl');
+        }
 
-            // When user clicks 'Table', load the reliable iframe version
-            if(tabId === 'table') {
-                target.innerHTML = `
-                    <div style="width:100%; min-height:700px; background:var(--bg);">
-                        <iframe 
-                            id="sofascore-standings"
-                            src="https://www.sofascore.com/tournament/football/england/premier-league/17/standings/embed" 
-                            style="width:100%; height:800px; border:0; border-radius:12px; filter: invert(0.9) hue-rotate(180deg) brightness(0.8);"
-                            scrolling="no">
-                        </iframe>
-                    </div>`;
-            }
-        };
+        function loadSofaTable(league) {
+            const sofaIdMap = { 'epl': 17, 'laliga': 8, 'seriea': 23 };
+            const id = sofaIdMap[league] || 17;
+            document.getElementById('table-container').innerHTML = `
+                <iframe src="https://www.sofascore.com/tournament/football/league/${id}/standings/embed" 
+                style="width:100%; height:600px; border:0; border-radius:12px;" scrolling="no"></iframe>`;
+        }
 
-        // 2. FIX: The League Switcher (Updates both Matches and Table)
         window.fT = function(leagueKey) {
-            const leagueId = LEAGUE_MAP[leagueKey] || 39;
-            const sofaIdMap = { 'epl': 17, 'laliga': 8, 'seriea': 23, 'bundesliga': 35, 'ligue1': 34 };
-            
-            // Update the Matches Feed (API-Sports)
-            if(typeof fetchMatches === 'function') fetchMatches(null, leagueId);
-            
-            // Update the Table (SofaScore) if it exists
-            const tableFrame = document.getElementById('sofascore-standings');
-            if(tableFrame && sofaIdMap[leagueKey]) {
-                tableFrame.src = `https://www.sofascore.com/tournament/football/league/${sofaIdMap[leagueKey]}/standings/embed`;
-            }
+            if(typeof fetchMatches === 'function') fetchMatches(leagueKey);
+            if(document.getElementById('table').classList.contains('active-page')) loadSofaTable(leagueKey);
         };
     </script>
 </body>
