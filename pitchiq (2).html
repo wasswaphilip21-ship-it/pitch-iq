@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PitchIQ — Smarter football. Live scores, lineups, AI predictions, transfer news and analysis.">
+<title>PitchIQ — Smarter Football</title>
+<!-- Google Analytics — replace GA_MEASUREMENT_ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GA_MEASUREMENT_ID');</script>
+<!-- AdSense — replace ca-pub-XXXXXXXXXXXXXXXX -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07111f;--bg2:#0c1829;--bg3:#111f35;--card:#0f1c2e;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--green:#00e87a;--gdim:rgba(0,232,122,.1);--blue:#3b9eff;--amber:#ffb830;--red:#ff4455;--text:#eef2ff;--t2:rgba(238,242,255,.52);--t3:rgba(238,242,255,.26);--head:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:12px;--r2:8px;--r3:20px;}
+[data-theme="light"]{--bg:#f0f4fa;--bg2:#e8edf5;--bg3:#dde3ee;--card:#ffffff;--border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.13);--text:#0d1117;--t2:rgba(13,17,23,.55);--t3:rgba(13,17,23,.3);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px;line-height:1.6;overflow-x:hidden;transition:background .2s,color .2s;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+button,input{font-family:var(--body);cursor:pointer;}
+/* COOKIE */
+#ckBanner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--bg2);border-top:0.5px solid var(--border2);padding:11px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+#ckBanner.hide{display:none;}
+.ck-text{flex:1;font-size:12px;color:var(--t2);min-width:180px;}
+.ck-text a{color:var(--green);}
+.ck-ok{padding:7px 18px;background:var(--green);color:#021a0b;font-size:12px;font-weight:600;border:none;border-radius:var(--r3);}
+.ck-no{padding:7px 14px;background:transparent;color:var(--t2);font-size:12px;border:0.5px solid var(--border2);border-radius:var(--r3);}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(7,17,31,.94);backdrop-filter:blur(20px);border-bottom:0.5px solid var(--border);height:54px;display:flex;align-items:center;padding:0 14px;gap:12px;}
+[data-theme="light"] .topbar{background:rgba(240,244,250,.96);}
+.logo{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.logo-mark{width:30px;height:30px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo-name{font-family:var(--head);font-size:24px;color:var(--text);letter-spacing:1.5px;}
+.logo-name em{color:var(--green);font-style:normal;}
+.top-srch{flex:1;max-width:260px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r3);padding:6px 13px;}
+.top-srch input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%;}
+.top-srch input::placeholder{color:var(--t3);}
+.topbar-r{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(255,68,85,.12);border:0.5px solid rgba(255,68,85,.28);border-radius:var(--r3);padding:4px 10px;font-size:10px;font-weight:600;color:var(--red);letter-spacing:.4px;}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:blink 1.4s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.theme-btn{background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r3);padding:5px 11px;font-size:13px;color:var(--t2);}
+/* LEAGUE BAR */
+.lbar{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:8px 14px;display:flex;gap:6px;overflow-x:auto;}
+.lbar::-webkit-scrollbar{display:none;}
+.lp{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--r3);border:0.5px solid var(--border);color:var(--t2);font-size:12px;white-space:nowrap;transition:all .15s;flex-shrink:0;background:none;}
+.lp.on{background:var(--gdim);border-color:rgba(0,232,122,.28);color:var(--green);}
+/* CALENDAR */
+.cal{background:var(--bg);border-bottom:0.5px solid var(--border);padding:8px 14px;}
+.cal-hd{font-size:9px;color:var(--t3);letter-spacing:.9px;margin-bottom:6px;}
+.cal-days{display:flex;gap:4px;overflow-x:auto;}
+.cal-days::-webkit-scrollbar{display:none;}
+.cal-d{display:flex;flex-direction:column;align-items:center;padding:6px 9px;border-radius:10px;cursor:pointer;min-width:44px;gap:2px;border:0.5px solid transparent;transition:all .15s;}
+.cal-d.on{background:var(--gdim);border-color:rgba(0,232,122,.22);}
+.cal-dow{font-size:9px;color:var(--t3);}
+.cal-date{font-size:15px;font-weight:500;color:var(--t2);}
+.cal-d.on .cal-dow,.cal-d.on .cal-date{color:var(--green);}
+.cal-pip{width:4px;height:4px;border-radius:50%;background:var(--border2);}
+.cal-d.on .cal-pip{background:var(--green);}
+/* SEC TABS */
+.stabs{background:var(--bg);border-bottom:0.5px solid var(--border);display:flex;overflow-x:auto;position:sticky;top:54px;z-index:100;}
+.stabs::-webkit-scrollbar{display:none;}
+.stab{padding:10px 15px;font-size:12px;font-weight:500;color:var(--t3);white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;}
+.stab.on{color:var(--text);border-bottom-color:var(--green);}
+/* LAYOUT */
+.main{display:grid;grid-template-columns:1fr 310px;max-width:1180px;margin:0 auto;}
+@media(max-width:900px){.main{grid-template-columns:1fr;}.sidebar{display:none;}}
+.feed{padding:12px 13px;}
+.sidebar{padding:12px 13px;border-left:0.5px solid var(--border);}
+/* AD SLOT */
+.ad-slot{background:var(--bg3);border:0.5px dashed var(--border2);border-radius:var(--r2);padding:12px;text-align:center;margin-bottom:12px;font-size:10px;color:var(--t3);min-height:90px;display:flex;align-items:center;justify-content:center;}
+/* WC BANNER */
+.wc-banner{background:linear-gradient(120deg,rgba(59,158,255,.1),rgba(0,232,122,.07));border:0.5px solid rgba(59,158,255,.22);border-radius:var(--r);padding:14px 16px;margin-bottom:13px;display:flex;align-items:center;gap:13px;}
+.wc-body{flex:1;}
+.wc-eye{font-size:9px;color:var(--blue);letter-spacing:.9px;margin-bottom:3px;}
+.wc-title{font-family:var(--head);font-size:22px;color:var(--text);letter-spacing:.8px;}
+.wc-sub{font-size:11px;color:var(--t2);}
+.wc-cd{text-align:center;flex-shrink:0;}
+.wc-timer{font-family:var(--mono);font-size:19px;font-weight:500;color:var(--green);}
+.wc-cd-lbl{font-size:9px;color:var(--t3);margin-top:2px;}
+/* SAFE BET */
+.sb{background:linear-gradient(135deg,rgba(0,232,122,.07),rgba(0,232,122,.02));border:0.5px solid rgba(0,232,122,.22);border-radius:var(--r);padding:14px 15px;margin-bottom:13px;}
+.sb-eye{font-size:9px;color:var(--green);letter-spacing:.9px;font-weight:600;margin-bottom:5px;}
+.sb-match{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.sb-reason{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:9px;}
+.sb-pill{display:inline-flex;align-items:center;background:var(--green);color:#021a0b;font-size:12px;font-weight:700;padding:5px 14px;border-radius:var(--r3);}
+.sb-disc{font-size:10px;color:var(--t3);margin-top:7px;}
+.sb-disc a{color:var(--t3);text-decoration:underline;}
+/* SHD */
+.shd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.shd-t{font-size:9px;color:var(--t3);letter-spacing:.9px;}
+.shd-a{font-size:11px;color:var(--green);cursor:pointer;}
+/* MATCH CARD */
+.mc{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .1s;}
+.mc:hover{border-color:var(--border2);transform:translateY(-1px);}
+.mc-lg{display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:9px;color:var(--t3);letter-spacing:.5px;border-bottom:0.5px solid var(--border);}
+.mc-lg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.mc-row{display:flex;align-items:center;padding:10px 12px;gap:8px;}
+.mc-min{font-size:10px;font-family:var(--mono);min-width:32px;text-align:center;}
+.mc-min.lv{color:var(--green);font-weight:600;}
+.mc-min.ft,.mc-min.up{color:var(--t3);}
+.mc-teams{flex:1;}
+.mc-team{display:flex;align-items:center;gap:8px;padding:2px 0;}
+.mc-badge{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+.mc-tname{font-size:13px;font-weight:500;color:var(--text);}
+.mc-tname.dim{color:var(--t3);font-weight:400;}
+.mc-s{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:18px;}
+.mc-score{font-size:16px;font-weight:700;color:var(--text);font-family:var(--mono);}
+.mc-score.dim{color:var(--t3);}
+.mc-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.mc-pred{font-size:10px;background:var(--gdim);color:var(--green);padding:2px 8px;border-radius:8px;white-space:nowrap;}
+.mc-chev{color:var(--t3);}
+.mc-stats{display:flex;padding:7px 12px;border-top:0.5px solid var(--border);}
+.mc-stat{flex:1;text-align:center;}
+.mc-sv{font-size:12px;font-weight:500;color:var(--text);}
+.mc-sl{font-size:9px;color:var(--t3);margin-top:1px;}
+.mc-bar-row{display:flex;align-items:center;gap:8px;padding:2px 12px 8px;}
+.mc-bar{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.mc-bar-f{height:3px;border-radius:2px;}
+.mc-bp{font-size:9px;color:var(--t3);min-width:24px;}
+.mc-bp.r{text-align:right;}
+/* PRED */
+.pc{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.pc-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:9px;}
+.pc-match{font-size:13px;font-weight:500;color:var(--text);}
+.pc-lg{font-size:10px;color:var(--t3);margin-top:1px;}
+.pc-chip{font-size:10px;font-weight:600;background:var(--gdim);color:var(--green);padding:3px 9px;border-radius:10px;white-space:nowrap;flex-shrink:0;}
+.prob-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.prob-lbl{font-size:11px;color:var(--t2);min-width:28px;}
+.prob-bar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.prob-fill{height:5px;border-radius:3px;}
+.prob-pct{font-size:11px;font-weight:500;color:var(--text);min-width:28px;text-align:right;font-family:var(--mono);}
+.pc-disc{font-size:9px;color:var(--t3);margin-top:7px;padding-top:7px;border-top:0.5px solid var(--border);}
+/* LINEUP */
+.lu{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.lu-hd{padding:12px 14px;border-bottom:0.5px solid var(--border);}
+.lu-match{font-size:14px;font-weight:600;color:var(--text);}
+.lu-ko{font-size:11px;color:var(--t3);margin-top:2px;}
+.lu-forms{display:flex;justify-content:space-between;padding:7px 14px;border-bottom:0.5px solid var(--border);font-size:12px;color:var(--t2);}
+.pitch{background:#1b5e34;}
+.pitch svg{display:block;width:100%;}
+.lu-leg{display:flex;gap:12px;padding:7px 14px;font-size:10px;color:var(--t3);}
+.lu-leg span{display:flex;align-items:center;gap:4px;}
+.lu-leg i{width:9px;height:9px;border-radius:50%;border:1.5px solid;}
+.lu-grid{display:grid;grid-template-columns:1fr 1fr;border-top:0.5px solid var(--border);}
+.lu-col{padding:10px 13px;}
+.lu-col:first-child{border-right:0.5px solid var(--border);}
+.lu-col-hd{font-size:9px;color:var(--t3);letter-spacing:.6px;margin-bottom:7px;}
+.lu-p{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:0.5px solid rgba(128,128,128,.06);}
+.lu-p:last-child{border-bottom:none;}
+.lu-num{font-size:10px;color:var(--t3);min-width:16px;font-family:var(--mono);}
+.lu-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;}
+.lu-name{font-size:12px;font-weight:500;color:var(--text);flex:1;}
+.lu-pos{font-size:9px;color:var(--t3);}
+.lu-tag{font-size:9px;padding:1px 5px;border-radius:5px;}
+.k-tag{background:rgba(0,232,122,.1);color:var(--green);}
+.c-tag{background:rgba(255,184,48,.1);color:var(--amber);}
+.d-tag{background:rgba(255,68,85,.1);color:var(--red);}
+.lu-ins{background:rgba(0,232,122,.05);border-top:0.5px solid rgba(0,232,122,.14);padding:10px 14px;}
+.lu-ins-lbl{font-size:9px;color:var(--green);letter-spacing:.6px;margin-bottom:4px;}
+.lu-ins-txt{font-size:12px;color:var(--t2);line-height:1.5;}
+/* TRANSFER */
+.tx{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.tx:hover{border-color:var(--border2);}
+.tx-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.tx-tag{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:.3px;}
+.t-con{background:rgba(0,232,122,.12);color:var(--green);}
+.t-rum{background:rgba(255,184,48,.12);color:var(--amber);}
+.t-med{background:rgba(59,158,255,.12);color:var(--blue);}
+.t-bid{background:rgba(255,68,85,.12);color:var(--red);}
+.tx-time{font-size:10px;color:var(--t3);}
+.tx-body{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:6px;}
+.tx-clubs{display:flex;align-items:center;gap:7px;}
+.tx-club{display:flex;align-items:center;gap:5px;background:rgba(128,128,128,.07);padding:3px 9px;border-radius:12px;}
+.tx-dot{width:10px;height:10px;border-radius:50%;}
+.tx-cn{font-size:11px;color:var(--t2);}
+.tx-fee{font-size:11px;color:var(--green);margin-top:5px;font-weight:500;}
+/* ODDS */
+.od{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.od-match{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.od-lg{font-size:10px;color:var(--t3);margin-bottom:10px;}
+.od-btns{display:flex;gap:6px;margin-bottom:8px;}
+.od-btn{flex:1;background:rgba(128,128,128,.06);border:0.5px solid var(--border);border-radius:var(--r2);padding:8px 6px;text-align:center;transition:all .15s;}
+.od-btn.best{border-color:rgba(0,232,122,.3);background:rgba(0,232,122,.06);}
+.od-out{font-size:9px;color:var(--t3);margin-bottom:3px;letter-spacing:.3px;}
+.od-val{font-size:17px;font-weight:700;color:var(--text);font-family:var(--mono);}
+.od-val.best{color:var(--green);}
+.bookies{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;}
+.bookies::-webkit-scrollbar{display:none;}
+.bookie{background:rgba(128,128,128,.06);border:0.5px solid var(--border);border-radius:var(--r2);padding:5px 10px;white-space:nowrap;}
+.bookie-n{font-size:9px;color:var(--t3);margin-bottom:2px;}
+.bookie-v{font-size:12px;font-weight:500;color:var(--text);font-family:var(--mono);}
+.od-ins{font-size:11px;color:var(--green);margin-top:7px;padding-top:7px;border-top:0.5px solid var(--border);}
+.od-disc{font-size:9px;color:var(--t3);margin-top:4px;}
+/* PLAYER */
+.plyr{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.plyr-hd{padding:14px;display:flex;align-items:center;gap:12px;border-bottom:0.5px solid var(--border);}
+.plyr-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;}
+.plyr-name{font-size:16px;font-weight:600;color:var(--text);}
+.plyr-club{font-size:11px;color:var(--t3);margin-top:2px;}
+.plyr-pos{font-size:10px;background:var(--gdim);color:var(--green);padding:2px 8px;border-radius:10px;display:inline-block;margin-top:4px;}
+.plyr-rtg{margin-left:auto;text-align:center;}
+.plyr-rtg-n{font-size:26px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.plyr-rtg-l{font-size:9px;color:var(--t3);}
+.plyr-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:0.5px solid var(--border);}
+.plyr-stat{padding:10px 8px;text-align:center;border-right:0.5px solid var(--border);}
+.plyr-stat:last-child{border-right:none;}
+.plyr-sn{font-size:18px;font-weight:700;color:var(--text);font-family:var(--mono);}
+.plyr-sl{font-size:9px;color:var(--t3);margin-top:2px;}
+.plyr-bars{padding:12px 14px;}
+.plyr-br{margin-bottom:8px;}
+.plyr-bt{display:flex;justify-content:space-between;margin-bottom:4px;}
+.plyr-bl{font-size:11px;color:var(--t2);}
+.plyr-bv{font-size:11px;font-weight:500;color:var(--text);font-family:var(--mono);}
+.plyr-bg{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.plyr-bf{height:4px;border-radius:2px;}
+/* FANTASY */
+.fan{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.fan-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.fan-title{font-size:13px;font-weight:600;color:var(--text);}
+.fan-wk{font-size:10px;color:var(--t3);}
+.fan-p{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:0.5px solid rgba(128,128,128,.07);}
+.fan-p:last-of-type{border-bottom:none;}
+.fan-rank{font-size:13px;font-weight:600;color:var(--t3);min-width:16px;font-family:var(--mono);}
+.fan-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.fan-info{flex:1;}
+.fan-pn{font-size:13px;font-weight:500;color:var(--text);}
+.fan-pd{font-size:10px;color:var(--t3);margin-top:1px;}
+.fan-pts{font-size:16px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.fan-ptsl{font-size:9px;color:var(--t3);}
+.fan-tip{background:rgba(0,232,122,.05);border:0.5px solid rgba(0,232,122,.15);border-radius:var(--r2);padding:9px 12px;margin-top:8px;font-size:12px;color:var(--t2);line-height:1.5;}
+.fan-tip strong{color:var(--green);}
+/* HIGHLIGHTS */
+.hl{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.hl:hover{border-color:var(--border2);}
+.hl-thumb{height:90px;background:var(--bg3);display:flex;align-items:center;justify-content:center;position:relative;}
+.hl-play{width:40px;height:40px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;}
+.hl-play::after{content:'';width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:14px solid #021a0b;margin-left:3px;}
+.hl-dur{position:absolute;bottom:7px;right:9px;background:rgba(0,0,0,.75);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;font-family:var(--mono);}
+.hl-src{position:absolute;top:7px;left:9px;background:rgba(255,0,0,.85);color:#fff;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;}
+.hl-body{padding:10px 12px;}
+.hl-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:3px;}
+.hl-meta{font-size:10px;color:var(--t3);}
+.hl-scorers{font-size:10px;color:var(--green);margin-top:2px;}
+/* DIGEST */
+.dig{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.dig-hero{background:linear-gradient(135deg,rgba(0,232,122,.07),rgba(0,232,122,.02));padding:14px;border-bottom:0.5px solid var(--border);}
+.dig-eye{font-size:9px;color:var(--green);letter-spacing:.9px;margin-bottom:4px;}
+.dig-title{font-family:var(--head);font-size:28px;color:var(--text);letter-spacing:1px;margin-bottom:3px;}
+.dig-sub{font-size:12px;color:var(--t2);}
+.dig-stats{display:flex;border-top:0.5px solid var(--border);padding-top:10px;margin-top:10px;}
+.dig-stat{flex:1;text-align:center;border-right:0.5px solid var(--border);}
+.dig-stat:last-child{border-right:none;}
+.dig-n{font-size:20px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.dig-l{font-size:9px;color:var(--t3);}
+.moment{padding:12px 14px;border-bottom:0.5px solid var(--border);}
+.moment:last-child{border-bottom:none;}
+.moment-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.moment-h{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.4;}
+.moment-d{font-size:12px;color:var(--t2);line-height:1.5;}
+/* FAN ZONE */
+.fz{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.reacts{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;}
+.reacts::-webkit-scrollbar{display:none;}
+.rbtn{display:flex;align-items:center;gap:4px;background:rgba(128,128,128,.07);border:0.5px solid var(--border);border-radius:16px;padding:5px 10px;white-space:nowrap;transition:all .15s;}
+.rbtn.on{background:var(--gdim);border-color:rgba(0,232,122,.25);}
+.remoji{font-size:14px;}
+.rcount{font-size:11px;color:var(--t2);}
+.rbtn.on .rcount{color:var(--green);}
+.cinput-row{display:flex;align-items:center;gap:8px;background:rgba(128,128,128,.07);border:0.5px solid var(--border);border-radius:var(--r3);padding:8px 14px;margin-bottom:12px;}
+.cav{width:26px;height:26px;border-radius:50%;background:var(--gdim);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--green);flex-shrink:0;}
+.cinput{background:none;border:none;outline:none;color:var(--text);font-size:13px;flex:1;}
+.cinput::placeholder{color:var(--t3);}
+.comment{display:flex;gap:9px;margin-bottom:12px;}
+.c-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.c-body{flex:1;}
+.c-hdr{display:flex;align-items:center;gap:7px;margin-bottom:3px;flex-wrap:wrap;}
+.c-name{font-size:12px;font-weight:600;color:var(--text);}
+.c-badge{font-size:9px;padding:1px 6px;border-radius:7px;}
+.c-time{font-size:10px;color:var(--t3);}
+.c-txt{font-size:13px;color:var(--t2);line-height:1.5;}
+.c-acts{display:flex;gap:12px;margin-top:5px;}
+.c-act{font-size:11px;color:var(--t3);cursor:pointer;}
+.c-act.liked{color:var(--red);}
+/* STANDINGS */
+.st{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.st-hd{padding:10px 14px;border-bottom:0.5px solid var(--border);font-size:12px;font-weight:600;color:var(--text);}
+.st-row{display:flex;align-items:center;padding:7px 14px;border-bottom:0.5px solid rgba(128,128,128,.05);gap:7px;}
+.st-row:last-child{border-bottom:none;}
+.st-row.hl{background:rgba(0,232,122,.04);}
+.st-pos{font-size:11px;color:var(--t3);min-width:18px;font-family:var(--mono);}
+.st-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+.st-name{flex:1;font-size:12px;font-weight:500;color:var(--text);}
+.st-num{font-size:11px;color:var(--t2);min-width:22px;text-align:center;font-family:var(--mono);}
+.st-pts{font-size:12px;font-weight:700;color:var(--text);min-width:22px;text-align:center;font-family:var(--mono);}
+.st-form{display:flex;gap:2px;}
+.sf{width:14px;height:14px;border-radius:50%;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.sf-w{background:var(--green);color:#021a0b;}
+.sf-d{background:rgba(128,128,128,.25);color:var(--t2);}
+.sf-l{background:var(--red);color:#fff;}
+.st-foot{padding:8px;text-align:center;font-size:11px;color:var(--green);cursor:pointer;}
+/* ARTICLES */
+.art{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:pointer;}
+.art:last-child{border-bottom:none;}
+.art-thumb{width:54px;height:54px;border-radius:var(--r2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(128,128,128,.07);}
+.art-body{flex:1;}
+.art-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;display:inline-block;margin-bottom:4px;letter-spacing:.4px;}
+.art-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:3px;}
+.art-meta{font-size:10px;color:var(--t3);}
+/* INNER TABS */
+.itabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;}
+.itabs::-webkit-scrollbar{display:none;}
+.itab{padding:5px 13px;border-radius:var(--r3);font-size:12px;font-weight:500;border:0.5px solid var(--border);color:var(--t3);white-space:nowrap;transition:all .15s;background:none;}
+.itab.on{background:var(--gdim);border-color:rgba(0,232,122,.25);color:var(--green);}
+/* NOTIFY */
+.nbar{display:flex;gap:8px;margin:10px 14px 14px;}
+.nbtn-g{flex:1;padding:10px;background:var(--gdim);border:0.5px solid rgba(0,232,122,.25);border-radius:var(--r2);color:var(--green);font-size:12px;font-weight:600;}
+.nbtn-gr{padding:10px 14px;background:rgba(128,128,128,.07);border:0.5px solid var(--border);border-radius:var(--r2);color:var(--t2);font-size:12px;}
+/* PRIVACY PAGE */
+.priv{max-width:700px;margin:0 auto;padding:24px 16px;display:none;}
+.priv.show{display:block;}
+.priv h1{font-family:var(--head);font-size:36px;color:var(--text);margin-bottom:8px;letter-spacing:1px;}
+.priv h2{font-size:15px;font-weight:600;color:var(--text);margin:18px 0 7px;}
+.priv p{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:9px;}
+.priv a{color:var(--green);}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--green);cursor:pointer;margin-bottom:18px;background:none;border:none;padding:0;}
+/* BOTTOM NAV */
+.bnav{display:none;position:sticky;bottom:0;background:rgba(7,17,31,.96);backdrop-filter:blur(16px);border-top:0.5px solid var(--border);padding:9px 0 14px;justify-content:space-around;z-index:100;}
+[data-theme="light"] .bnav{background:rgba(240,244,250,.97);}
+@media(max-width:700px){.bnav{display:flex;}}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:var(--t3);cursor:pointer;transition:color .15s;}
+.bn-item.on{color:var(--green);}
+.bn-icon{font-size:20px;}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fu{animation:fadeUp .25s ease forwards;}
+</style>
+</head>
+<body>
+
+<!-- COOKIE BANNER -->
+<div id="ckBanner">
+  <div class="ck-text">🍪 We use cookies to improve your experience and show relevant ads. See our <a href="#" onclick="showPriv()">Privacy Policy</a>.</div>
+  <button class="ck-no" onclick="document.getElementById('ckBanner').classList.add('hide')">Decline</button>
+  <button class="ck-ok" onclick="acceptCookies()">Accept all</button>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">⚽</div>
+    <div class="logo-name">PITCH<em>IQ</em></div>
+  </div>
+  <div class="top-srch">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.4;flex-shrink:0;"><circle cx="6.5" cy="6.5" r="5"/><line x1="10.5" y1="10.5" x2="14" y2="14" stroke-linecap="round"/></svg>
+    <input type="text" placeholder="Search teams, players, leagues…">
+  </div>
+  <div class="topbar-r">
+    <div class="live-pill"><div class="ldot"></div>LIVE</div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">☀ Light</button>
+  </div>
+</div>
+
+<!-- LEAGUE BAR -->
+<div class="lbar">
+  <button class="lp on" onclick="filterLeague(this,'all')">🌍 All</button>
+  <button class="lp" onclick="filterLeague(this,'epl')">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
+  <button class="lp" onclick="filterLeague(this,'laliga')">🇪🇸 La Liga</button>
+  <button class="lp" onclick="filterLeague(this,'bundesliga')">🇩🇪 Bundesliga</button>
+  <button class="lp" onclick="filterLeague(this,'seriea')">🇮🇹 Serie A</button>
+  <button class="lp" onclick="filterLeague(this,'ligue1')">🇫🇷 Ligue 1</button>
+  <button class="lp" onclick="filterLeague(this,'ucl')">🌐 Champions League</button>
+  <button class="lp" onclick="filterLeague(this,'wc')">🏆 World Cup 2026</button>
+  <button class="lp" onclick="filterLeague(this,'afcon')">🌍 AFCON</button>
+</div>
+
+<!-- CALENDAR -->
+<div class="cal">
+  <div class="cal-hd">MATCH CALENDAR</div>
+  <div class="cal-days" id="calDays"></div>
+</div>
+
+<!-- SECTION TABS -->
+<div class="stabs">
+  <button class="stab on" onclick="goTab(this,'live')">Live Now</button>
+  <button class="stab" onclick="goTab(this,'today')">Today</button>
+  <button class="stab" onclick="goTab(this,'predictions')">Predictions</button>
+  <button class="stab" onclick="goTab(this,'lineups')">Lineups</button>
+  <button class="stab" onclick="goTab(this,'transfers')">Transfers</button>
+  <button class="stab" onclick="goTab(this,'odds')">Odds</button>
+  <button class="stab" onclick="goTab(this,'players')">Players</button>
+  <button class="stab" onclick="goTab(this,'fantasy')">Fantasy</button>
+  <button class="stab" onclick="goTab(this,'highlights')">Highlights</button>
+  <button class="stab" onclick="goTab(this,'digest')">Weekly Digest</button>
+  <button class="stab" onclick="goTab(this,'fanzone')">Fan Zone</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="feed" id="feed"></div>
+  <div class="sidebar" id="sidebar"></div>
+</div>
+
+<!-- PRIVACY PAGE -->
+<div class="priv" id="privPage">
+  <button class="back-btn" onclick="hidePriv()">← Back to PitchIQ</button>
+  <h1>PRIVACY POLICY</h1>
+  <p>Last updated: April 12, 2026</p>
+  <p>Welcome to PitchIQ. This Privacy Policy explains how we collect, use, and protect your information when you use pitchiq.com.</p>
+  <h2>Information we collect</h2>
+  <p>We collect information you provide (such as comments), and information collected automatically (IP address, browser type, pages visited) through cookies and analytics tools including Google Analytics.</p>
+  <h2>How we use your information</h2>
+  <p>We use your information to provide and improve our service, personalise your experience, display relevant advertisements through Google AdSense, and analyse site usage through Google Analytics.</p>
+  <h2>Cookies</h2>
+  <p>We use cookies to remember your preferences (dark/light mode), measure traffic through Google Analytics, and serve ads through Google AdSense. You can control cookies through your browser settings or our consent banner.</p>
+  <h2>Third-party services</h2>
+  <p>We use Google Analytics, Google AdSense, API-Football (match data), and NewsAPI (transfer news). Each has its own privacy policy governing its data practices.</p>
+  <h2>Advertising & betting</h2>
+  <p>PitchIQ may display betting advertisements. All betting content is for adults aged 18+ only. We encourage responsible gambling. For support visit <a href="https://www.begambleaware.org" target="_blank">BeGambleAware.org</a>.</p>
+  <h2>Your rights</h2>
+  <p>You have the right to access, correct, or delete your personal data. Contact us at privacy@pitchiq.com.</p>
+  <h2>Contact</h2>
+  <p>For questions about this policy, email privacy@pitchiq.com.</p>
+  <p style="margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border);font-size:11px;color:var(--t3);">© 2026 PitchIQ · <a href="#" onclick="showPriv()">Privacy Policy</a> · All rights reserved</p>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav" id="bnav">
+  <div class="bn-item on" onclick="goTabMob(this,'live')"><div class="bn-icon">⚽</div>Home</div>
+  <div class="bn-item" onclick="goTabMob(this,'lineups')"><div class="bn-icon">📋</div>Lineups</div>
+  <div class="bn-item" onclick="goTabMob(this,'predictions')"><div class="bn-icon">🎯</div>Predict</div>
+  <div class="bn-item" onclick="goTabMob(this,'transfers')"><div class="bn-icon">🔄</div>Transfers</div>
+  <div class="bn-item" onclick="goTabMob(this,'digest')"><div class="bn-icon">📊</div>Digest</div>
+</div>
+
+<script>
+// ── API CONFIG ──
+const CFG={API_KEY:'35f0bfdd839466bf99892dc805c57b94',API_BASE:'https://v3.football.api-sports.io'};
+
+// ── TIMEZONE ──
+const TZ=Intl.DateTimeFormat().resolvedOptions().timeZone;
+const TZA=new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2]||'Local';
+function fmtTime(utc){if(!utc)return '--:--';return new Date(utc).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',timeZone:TZ});}
+
+// ── THEME ──
+function initTheme(){const s=localStorage.getItem('piq-theme')||( window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark');applyTheme(s);}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);const b=document.getElementById('themeBtn');if(b)b.textContent=t==='dark'?'☀ Light':'🌙 Dark';localStorage.setItem('piq-theme',t);}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+
+// ── COOKIES ──
+function acceptCookies(){localStorage.setItem('piq-ck','1');document.getElementById('ckBanner').classList.add('hide');}
+function initCookies(){if(localStorage.getItem('piq-ck'))document.getElementById('ckBanner').classList.add('hide');}
+
+// ── PRIVACY ──
+function showPriv(){document.getElementById('privPage').classList.add('show');document.getElementById('privPage').scrollIntoView({behavior:'smooth'});}
+function hidePriv(){document.getElementById('privPage').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});}
+
+// ── DEMO DATA ──
+const TZL=' · '+TZA;
+const D={
+  matches:[
+    {id:1,lg:'Premier League',lc:'#38003c',st:'live',min:"67'",h:'Arsenal',hc:'#c8102e',ha:'ARS',a:'Chelsea',ac:'#034694',aa:'CHE',hs:2,as_:1,hp:62,ap:38,hsh:14,ash:7,pred:'Arsenal win · 81%',key:'epl'},
+    {id:2,lg:'Premier League',lc:'#38003c',st:'live',min:'HT',h:'Man City',hc:'#6cabdd',ha:'MCI',a:'Man Utd',ac:'#da291c',aa:'MUN',hs:1,as_:0,hp:58,ap:42,hsh:9,ash:4,pred:'City win · 74%',key:'epl'},
+    {id:3,lg:'Bundesliga',lc:'#d20515',st:'live',min:"23'",h:'Dortmund',hc:'#fde100',ha:'BVB',a:'Bayern',ac:'#dc052d',aa:'FCB',hs:0,as_:0,hp:44,ap:56,hsh:3,ash:6,pred:'Bayern win · 68%',key:'bundesliga'},
+    {id:4,lg:'Premier League',lc:'#38003c',st:'up',time:'17:30',h:'Liverpool',hc:'#c8102e',ha:'LIV',a:'Tottenham',ac:'#132257',aa:'TOT',pred:'Liverpool · 69%',key:'epl'},
+    {id:5,lg:'Champions League',lc:'#1b3f6a',st:'up',time:'22:00',h:'Real Madrid',hc:'#00529f',ha:'RMA',a:'Atletico',ac:'#c00b1e',aa:'ATM',pred:'Real Madrid · 78%',key:'ucl'},
+    {id:6,lg:'La Liga',lc:'#ee8707',st:'up',time:'23:00',h:'Barcelona',hc:'#a50044',ha:'BAR',a:'Valencia',ac:'#f47920',aa:'VAL',pred:'Barcelona · 82%',key:'laliga'},
+    {id:7,lg:'Serie A',lc:'#024494',st:'ft',h:'Inter Milan',hc:'#010e80',ha:'INT',a:'AC Milan',ac:'#cc0000',aa:'MIL',hs:2,as_:2,hp:51,ap:49,hsh:11,ash:10,key:'seriea'},
+    {id:8,lg:'Ligue 1',lc:'#da291c',st:'up',time:'22:00',h:'PSG',hc:'#004170',ha:'PSG',a:'Monaco',ac:'#c00b1e',aa:'MON',pred:'PSG · 72%',key:'ligue1'},
+  ],
+  preds:[
+    {m:'Arsenal vs Tottenham',lg:'Premier League'+TZL,out:'Home win',w:68,d:18,l:14},
+    {m:'Real Madrid vs Atletico',lg:'Champions League'+TZL,out:'Home win',w:78,d:14,l:8},
+    {m:'Liverpool vs Man City',lg:'Premier League'+TZL,out:'Draw',w:38,d:32,l:30},
+    {m:'Barcelona vs Valencia',lg:'La Liga'+TZL,out:'Home win',w:82,d:11,l:7},
+    {m:'PSG vs Monaco',lg:'Ligue 1'+TZL,out:'Home win',w:71,d:17,l:12},
+    {m:'Bayern vs Dortmund',lg:'Bundesliga'+TZL,out:'Home win',w:65,d:20,l:15},
+  ],
+  transfers:[
+    {tag:'confirmed',cls:'t-con',time:'2h ago',body:'Mbappé signs new deal — stays at Real Madrid until 2028',to:'Real Madrid',tc:'#00529f',fee:'Contract extension · No fee'},
+    {tag:'rumour',cls:'t-rum',time:'5h ago',body:'Arsenal weighing £85m move for Gyökeres this summer',from:'Sporting CP',fc:'#006600',to:'Arsenal',tc:'#c8102e',fee:'Rumoured fee: £85m · Reliability: 6/10'},
+    {tag:'medical',cls:'t-med',time:'1h ago',body:'Wirtz undergoes medical at Liverpool ahead of record move',from:'Leverkusen',fc:'#e32219',to:'Liverpool',tc:'#c8102e',fee:'Fee: £116m · Deal virtually done'},
+    {tag:'bid',cls:'t-bid',time:'3h ago',body:'Chelsea submit opening bid for Osimhen — Napoli want €120m',from:'Chelsea',fc:'#034694',to:'Napoli',tc:'#087ac0',fee:'Opening bid: €90m · Rejected'},
+    {tag:'rumour',cls:'t-rum',time:'6h ago',body:'Man United eyeing Zirkzee return after difficult debut season',from:'Man Utd',fc:'#da291c',to:'Bologna',tc:'#003f8a',fee:'Loan deal possible · Reliability: 4/10'},
+    {tag:'confirmed',cls:'t-con',time:'30m ago',body:'Osimhen joins Saudi Pro League on permanent deal',from:'Napoli',fc:'#087ac0',to:'Al-Hilal',tc:'#2196f3',fee:'Fee: €75m confirmed'},
+  ],
+  odds:[
+    {m:'Arsenal vs Tottenham',lg:'Premier League · Sat 12 Apr · 17:30 '+TZA,h:{v:'2.10',b:true},d:{v:'3.40'},a:{v:'3.60'},bk:[{n:'Bet365',v:'2.10'},{n:'1xBet',v:'2.05'},{n:'SportPesa',v:'2.15'},{n:'Betway',v:'2.08'},{n:'Parimatch',v:'2.12'}],ins:'Best value: SportPesa 2.15 · Our pick aligns (68% confidence)'},
+    {m:'Real Madrid vs Atletico',lg:'Champions League · Sat · 22:00 '+TZA,h:{v:'1.95',b:true},d:{v:'3.60'},a:{v:'4.10'},bk:[{n:'Bet365',v:'1.95'},{n:'1xBet',v:'1.92'},{n:'SportPesa',v:'1.98'},{n:'Betway',v:'1.90'},{n:'Parimatch',v:'1.96'}],ins:'Best value: SportPesa 1.98 · Real Madrid strong home form'},
+    {m:'Barcelona vs Valencia',lg:'La Liga · Sat · 23:00 '+TZA,h:{v:'1.55',b:true},d:{v:'4.20'},a:{v:'6.50'},bk:[{n:'Bet365',v:'1.55'},{n:'1xBet',v:'1.52'},{n:'SportPesa',v:'1.58'},{n:'Betway',v:'1.54'},{n:'Parimatch',v:'1.56'}],ins:'Barcelona heavy favourites · W7 in last 8 home games'},
+  ],
+  players:[
+    {i:'BS',name:'Bukayo Saka',club:'Arsenal · Premier League',pos:'Right Wing',rtg:'8.6',g:18,a:12,ch:87,fit:'94%',c:'#c8102e',bars:[{l:'Dribble success',v:'82%',p:82,c:'#00e87a'},{l:'Key passes/game',v:'3.4',p:74,c:'#3b9eff'},{l:'Shot accuracy',v:'71%',p:71,c:'#ffb830'}]},
+    {i:'VJ',name:'Vinicius Jr',club:'Real Madrid · La Liga',pos:'Left Wing',rtg:'9.1',g:22,a:10,ch:94,fit:'100%',c:'#00529f',bars:[{l:'Dribble success',v:'87%',p:87,c:'#00e87a'},{l:'Key passes/game',v:'3.8',p:82,c:'#3b9eff'},{l:'Shot accuracy',v:'74%',p:74,c:'#ffb830'}]},
+    {i:'EH',name:'Erling Haaland',club:'Man City · Premier League',pos:'Striker',rtg:'8.9',g:27,a:5,ch:76,fit:'98%',c:'#6cabdd',bars:[{l:'Goals per game',v:'0.84',p:84,c:'#00e87a'},{l:'Shots on target',v:'68%',p:68,c:'#3b9eff'},{l:'Aerial duels won',v:'62%',p:62,c:'#ffb830'}]},
+  ],
+  fantasy:[
+    {rank:1,i:'BS',name:'Bukayo Saka',det:'Arsenal vs Spurs · Home',pts:14,bg:'rgba(200,16,46,.2)',fc:'#c8102e'},
+    {rank:2,i:'EH',name:'Erling Haaland',det:'Man City vs Wolves · Home',pts:13,bg:'rgba(108,171,221,.2)',fc:'#6cabdd'},
+    {rank:3,i:'VJ',name:'Vinicius Jr',det:'Real Madrid vs Atletico · Home',pts:13,bg:'rgba(0,82,159,.2)',fc:'#3b9eff'},
+    {rank:4,i:'KM',name:'Kylian Mbappé',det:'Real Madrid vs Atletico · Home',pts:12,bg:'rgba(0,82,159,.2)',fc:'#3b9eff'},
+    {rank:5,i:'HS',name:'Heung-min Son',det:'Spurs vs Arsenal · Away',pts:11,bg:'rgba(19,34,87,.3)',fc:'#4a7abf'},
+  ],
+  standings:[
+    {pos:1,n:'Arsenal',c:'#c8102e',p:32,gd:'+38',pts:76,f:['W','W','D','W','W']},
+    {pos:2,n:'Man City',c:'#6cabdd',p:33,gd:'+36',pts:76,f:['W','D','W','W','L']},
+    {pos:3,n:'Liverpool',c:'#c8102e',p:33,gd:'+34',pts:74,f:['W','W','W','D','W']},
+    {pos:4,n:'Aston Villa',c:'#95bfe5',p:32,gd:'+18',pts:63,f:['W','L','W','W','D']},
+    {pos:5,n:'Tottenham',c:'#132257',p:32,gd:'+11',pts:58,f:['W','W','L','W','D']},
+    {pos:6,n:'Chelsea',c:'#034694',p:32,gd:'+9',pts:55,f:['D','W','L','W','W']},
+  ],
+  highlights:[
+    {t:'All goals & highlights — Arsenal 2–1 Chelsea',m:'Premier League · Matchday 33',s:"Saka 23' · Havertz 51' · Gallagher 38'",dur:'3:24'},
+    {t:'Vinicius Jr scores his 100th La Liga goal',m:'La Liga · Matchday 31',s:"Vinicius Jr 2 goals · Bellingham · Rodrygo",dur:'4:51'},
+    {t:'Haaland hat-trick as City thrash Wolves 5–0',m:'Premier League · Matchday 33',s:"Haaland 12' 34' 67'",dur:'3:10'},
+    {t:'AFCON 2026 Qualifiers — Nigeria vs Ghana',m:'AFCON Qualifiers · Group D',s:"Osimhen 22' · Kudus 67'",dur:'5:15'},
+  ],
+  digest:{wk:'Apr 7–13',matches:47,goals:138,upsets:6,records:3,moments:[
+    {tag:'UPSET',cls:'t-bid',match:'Brentford 3–1 Arsenal',h:"Arsenal's title hopes took a serious hit",d:"Ivan Toney ran the show — 2 goals, 1 assist. Arsenal had 68% possession but were punished on every mistake."},
+    {tag:'RECORD',cls:'t-med',match:'Real Madrid vs Valencia',h:'Vinicius Jr reaches 100 La Liga goals',d:"The Brazilian became the fastest player in Real Madrid history to reach the century — beating Raul's 22-year-old record in just 187 appearances."},
+    {tag:'GOAL OF WEEK',cls:'t-con',match:'PSG vs Monaco',h:"Mbappé's 40-yard screamer stuns everyone",d:"Spotting the keeper off his line, Mbappé chipped from the halfway line. Bounced once and nestled top corner. One of the goals of the decade."},
+  ]}
+};
+
+// ── STATE ──
+let curTab='live',curLg='all';
+
+// ── CALENDAR ──
+function buildCal(){
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let h='';
+  for(let i=0;i<9;i++){
+    const isTd=i===4,has=i>1&&i<8;
+    h+=`<div class="cal-d${isTd?' on':''}${has?' has':''}" onclick="selDay(this)">
+      <div class="cal-dow">${days[i%7]}</div>
+      <div class="cal-date">${7+i}</div>
+      <div class="cal-pip"></div>
+    </div>`;
+  }
+  document.getElementById('calDays').innerHTML=h;
+}
+function selDay(el){document.querySelectorAll('.cal-d').forEach(d=>d.classList.remove('on'));el.classList.add('on');}
+
+// ── TABS ──
+function goTab(el,tab){
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('on'));
+  if(el)el.classList.add('on');
+  curTab=tab;
+  render(tab,curLg);
+}
+function goTabMob(el,tab){
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  const tabEl=Array.from(document.querySelectorAll('.stab')).find(t=>t.getAttribute('onclick').includes("'"+tab+"'"));
+  goTab(tabEl,tab);
+}
+function filterLeague(el,lg){
+  document.querySelectorAll('.lp').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  curLg=lg;
+  render(curTab,lg);
+}
+
+// ── WC TIMER ──
+function startWC(){
+  const wc=new Date('2026-06-11T00:00:00Z');
+  function tick(){
+    const el=document.getElementById('wcTimer');if(!el)return;
+    const diff=wc-Date.now();
+    if(diff<=0){el.textContent="IT'S LIVE!";return;}
+    const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000);
+    el.textContent=`${String(d).padStart(2,'0')}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m`;
+  }
+  tick();setInterval(()=>{if(document.getElementById('wcTimer'))tick();},30000);
+}
+
+// ── RENDER ──
+function render(tab,lg='all'){
+  const feed=document.getElementById('feed'),sb=document.getElementById('sidebar');
+  feed.innerHTML='';sb.innerHTML='';
+  feed.className='feed fu';
+
+  if(tab==='live'||tab==='today'){
+    feed.innerHTML+=`<div class="wc-banner">
+      <span style="font-size:30px;flex-shrink:0;">🏆</span>
+      <div class="wc-body"><div class="wc-eye">WORLD CUP 2026 · JUNE 11</div><div class="wc-title">THE BIG ONE IS COMING</div><div class="wc-sub">48 teams · 104 matches · 3 host nations</div></div>
+      <div class="wc-cd"><div class="wc-timer" id="wcTimer">--d --h --m</div><div class="wc-cd-lbl">countdown</div></div>
+    </div>`;
+    startWC();
+    feed.innerHTML+=`<div class="ad-slot"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins></div>`;
+    feed.innerHTML+=rSB();
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">${tab==='live'?'LIVE NOW':'TODAY\'S MATCHES'} · All times ${TZA}</span><span class="shd-a">See all →</span></div>`;
+    D.matches.filter(m=>lg==='all'||m.key===lg).forEach(m=>{feed.innerHTML+=rMatch(m);});
+    sb.innerHTML+=rStandings();
+    sb.innerHTML+=`<div class="ad-slot" style="min-height:250px;"><ins class="adsbygoogle" style="display:block" data-ad-slot="0987654321"></ins></div>`;
+    sb.innerHTML+=rSBPreds();sb.innerHTML+=rArts();
+  }
+  else if(tab==='predictions'){
+    feed.innerHTML+=rSB();
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">TODAY'S PREDICTIONS · ${TZA}</span><span class="shd-a">All leagues →</span></div>`;
+    D.preds.forEach(p=>{feed.innerHTML+=rPred(p);});
+    sb.innerHTML+=rStandings();sb.innerHTML+=rArts();
+  }
+  else if(tab==='lineups'){
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">CONFIRMED LINEUPS</span><span class="shd-a">All matches →</span></div>`;
+    feed.innerHTML+=rLineup();
+    sb.innerHTML+=rSBPreds();sb.innerHTML+=rStandings();
+  }
+  else if(tab==='transfers'){
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">TRANSFER NEWS & RUMOURS</span><span class="shd-a">All →</span></div>`;
+    feed.innerHTML+=`<div class="itabs"><button class="itab on" onclick="fTx(this,'all')">All</button><button class="itab" onclick="fTx(this,'confirmed')">Confirmed</button><button class="itab" onclick="fTx(this,'rumour')">Rumours</button><button class="itab" onclick="fTx(this,'medical')">Medicals</button><button class="itab" onclick="fTx(this,'bid')">Bids</button></div>`;
+    feed.innerHTML+=`<div id="txList">${D.transfers.map(t=>rTx(t)).join('')}</div>`;
+    sb.innerHTML+=rStandings();sb.innerHTML+=rArts();
+  }
+  else if(tab==='odds'){
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">ODDS COMPARISON · Best value highlighted</span></div>`;
+    D.odds.forEach(o=>{feed.innerHTML+=rOdds(o);});
+    sb.innerHTML+=rStandings();
+  }
+  else if(tab==='players'){
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">PLAYER PROFILES & STATS</span><span class="shd-a">All players →</span></div>`;
+    D.players.forEach(p=>{feed.innerHTML+=rPlayer(p);});
+    sb.innerHTML+=rStandings();
+  }
+  else if(tab==='fantasy'){
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">FANTASY FOOTBALL TIPS · GW33</span></div>`;
+    feed.innerHTML+=rFantasy();
+    sb.innerHTML+=rStandings();sb.innerHTML+=rArts();
+  }
+  else if(tab==='highlights'){
+    feed.innerHTML+=`<div class="shd"><span class="shd-t">VIDEO HIGHLIGHTS</span><span class="shd-a">All videos →</span></div>`;
+    D.highlights.forEach(h=>{feed.innerHTML+=rHL(h);});
+    sb.innerHTML+=rStandings();
+  }
+  else if(tab==='digest'){feed.innerHTML+=rDigest();sb.innerHTML+=rStandings();sb.innerHTML+=rArts();}
+  else if(tab==='fanzone'){feed.innerHTML+=`<div class="shd"><span class="shd-t">FAN ZONE · Join the conversation</span></div>`;feed.innerHTML+=rFZ();sb.innerHTML+=rStandings();}
+}
+
+// ── RENDERERS ──
+function rSB(){return`<div class="sb">
+  <div class="sb-eye">⚡ SAFE BET OF THE DAY · Updated 07:00 ${TZA}</div>
+  <div class="sb-match">Real Madrid vs Atletico Madrid</div>
+  <div class="sb-reason">Real Madrid have won 9 of their last 11 home derbies. Atletico have scored in just 2 of their last 6 away games. Stats overwhelmingly favour the hosts.</div>
+  <div class="sb-pill">Real Madrid Win · 78% confidence</div>
+  <div class="sb-disc">⚠ Bet safely · 18+ only · <a href="https://www.begambleaware.org" target="_blank">BeGambleAware.org</a></div>
+</div>`;}
+
+function rMatch(m){
+  const isLv=m.st==='live',isFT=m.st==='ft';
+  const sc=isLv?'lv':isFT?'ft':'up';
+  const st=isLv?m.min:isFT?'FT':(m.time||'--:--');
+  const s1=m.hs!=null?m.hs:'–',s2=m.as_!=null?m.as_:'–';
+  const stats=(isLv||isFT)?`<div class="mc-stats">
+    <div class="mc-stat"><div class="mc-sv">${m.hp}%</div><div class="mc-sl">Possession</div></div>
+    <div class="mc-stat"><div class="mc-sv">${m.hsh}</div><div class="mc-sl">Home shots</div></div>
+    <div class="mc-stat"><div class="mc-sv">${m.ash}</div><div class="mc-sl">Away shots</div></div>
+    <div class="mc-stat"><div class="mc-sv">${m.ap}%</div><div class="mc-sl">Possession</div></div>
+  </div>
+  <div class="mc-bar-row">
+    <span class="mc-bp">${m.hp}%</span>
+    <div class="mc-bar"><div class="mc-bar-f" style="width:${m.hp}%;background:${m.hc};"></div></div>
+    <div class="mc-bar"><div class="mc-bar-f" style="width:${m.ap}%;background:${m.ac};float:right;"></div></div>
+    <span class="mc-bp r">${m.ap}%</span>
+  </div>`:'';
+  return`<div class="mc">
+    <div class="mc-lg"><div class="mc-lg-dot" style="background:${m.lc};"></div>${m.lg}</div>
+    <div class="mc-row">
+      <div class="mc-min ${sc}">${st}</div>
+      <div class="mc-teams">
+        <div class="mc-team"><div class="mc-badge" style="background:${m.hc};">${m.ha.slice(0,2)}</div><span class="mc-tname">${m.h}</span></div>
+        <div class="mc-team"><div class="mc-badge" style="background:${m.ac};">${m.aa.slice(0,2)}</div><span class="mc-tname${isFT&&m.hs>m.as_?' dim':''}">${m.a}</span></div>
+      </div>
+      <div class="mc-s"><div class="mc-score">${s1}</div><div class="mc-score${isFT&&m.as_<m.hs?' dim':''}">${s2}</div></div>
+      <div class="mc-right">${m.pred?`<div class="mc-pred">${m.pred}</div>`:''}<div class="mc-chev">›</div></div>
+    </div>${stats}
+  </div>`;}
+
+function rPred(p){return`<div class="pc">
+  <div class="pc-hd"><div><div class="pc-match">${p.m}</div><div class="pc-lg">${p.lg}</div></div><div class="pc-chip">${p.out}</div></div>
+  <div class="prob-row"><span class="prob-lbl">Win</span><div class="prob-bar"><div class="prob-fill" style="width:${p.w}%;background:#3b9eff;"></div></div><span class="prob-pct">${p.w}%</span></div>
+  <div class="prob-row"><span class="prob-lbl">Draw</span><div class="prob-bar"><div class="prob-fill" style="width:${p.d}%;background:rgba(128,128,128,.4);"></div></div><span class="prob-pct">${p.d}%</span></div>
+  <div class="prob-row"><span class="prob-lbl">Loss</span><div class="prob-bar"><div class="prob-fill" style="width:${p.l}%;background:#ff4455;"></div></div><span class="prob-pct">${p.l}%</span></div>
+  <div class="pc-disc">AI-generated from form, stats & H2H · Not financial advice · Bet safely · 18+</div>
+</div>`;}
+
+function rLineup(){return`<div class="lu">
+  <div class="lu-hd"><div class="lu-match">Arsenal vs Tottenham</div><div class="lu-ko">Premier League · Sat Apr 12 · 17:30 ${TZA} · Kickoff in 4h 22m</div></div>
+  <div class="lu-forms"><div>Arsenal · 4–3–3</div><div>4–2–3–1 · Tottenham</div></div>
+  <div class="pitch"><svg viewBox="0 0 320 420" xmlns="http://www.w3.org/2000/svg">
+    <rect width="320" height="420" fill="#1b5e34"/>
+    <rect x="2" y="2" width="316" height="416" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1.5"/>
+    <line x1="2" y1="210" x2="318" y2="210" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+    <circle cx="160" cy="210" r="35" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+    <rect x="90" y="2" width="140" height="50" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+    <rect x="120" y="2" width="80" height="24" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+    <rect x="90" y="368" width="140" height="50" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+    <rect x="120" y="394" width="80" height="24" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+    <rect x="0" y="0" width="320" height="210" fill="rgba(0,0,0,.14)"/>
+    <circle cx="160" cy="26" r="13" fill="#132257" stroke="rgba(255,255,255,.3)" stroke-width="1"/><text x="160" y="30" text-anchor="middle" font-size="7.5" fill="white" font-family="DM Sans,sans-serif" font-weight="600">Vicario</text>
+    <circle cx="48" cy="78" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="48" y="82" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Porro</text>
+    <circle cx="116" cy="78" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="116" y="82" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Romero</text>
+    <circle cx="204" cy="78" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="204" y="82" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">vd Ven</text>
+    <circle cx="272" cy="78" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="272" y="82" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Udogie</text>
+    <circle cx="92" cy="136" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="92" y="140" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Bissouma</text>
+    <circle cx="228" cy="136" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="228" y="140" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Sarr</text>
+    <circle cx="52" cy="186" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="52" y="190" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Johnson</text>
+    <circle cx="160" cy="183" r="14" fill="#0d1f3e" stroke="rgba(0,232,122,.75)" stroke-width="1.5"/><text x="160" y="187" text-anchor="middle" font-size="7.5" fill="white" font-family="DM Sans,sans-serif" font-weight="600">Maddison</text>
+    <circle cx="268" cy="186" r="13" fill="#132257" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="268" y="190" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Kulusevski</text>
+    <circle cx="160" cy="204" r="15" fill="#091530" stroke="rgba(0,232,122,.85)" stroke-width="1.5"/><text x="160" y="208" text-anchor="middle" font-size="8" fill="white" font-family="DM Sans,sans-serif" font-weight="700">Son</text>
+    <circle cx="160" cy="400" r="13" fill="#c8102e" stroke="rgba(255,255,255,.3)" stroke-width="1"/><text x="160" y="404" text-anchor="middle" font-size="7.5" fill="white" font-family="DM Sans,sans-serif" font-weight="600">Raya</text>
+    <circle cx="48" cy="352" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="48" y="356" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">White</text>
+    <circle cx="116" cy="352" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="116" y="356" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Saliba</text>
+    <circle cx="204" cy="352" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="204" y="356" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Gabriel</text>
+    <circle cx="272" cy="352" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="272" y="356" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Zinchenko</text>
+    <circle cx="80" cy="304" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="80" y="308" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Rice</text>
+    <circle cx="160" cy="304" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="160" y="308" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Partey</text>
+    <circle cx="240" cy="304" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="240" y="308" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Ødegaard</text>
+    <circle cx="50" cy="250" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="50" y="254" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Martinelli</text>
+    <circle cx="160" cy="246" r="15" fill="#8b0000" stroke="rgba(0,232,122,.85)" stroke-width="1.5"/><text x="160" y="250" text-anchor="middle" font-size="8" fill="white" font-family="DM Sans,sans-serif" font-weight="700">Saka</text>
+    <circle cx="270" cy="250" r="13" fill="#c8102e" stroke="rgba(255,255,255,.2)" stroke-width="1"/><text x="270" y="254" text-anchor="middle" font-size="7" fill="white" font-family="DM Sans,sans-serif">Havertz</text>
+    <text x="8" y="206" font-size="7" fill="rgba(255,255,255,.25)" font-family="DM Sans,sans-serif">SPURS</text>
+    <text x="8" y="222" font-size="7" fill="rgba(255,255,255,.25)" font-family="DM Sans,sans-serif">ARSENAL</text>
+  </svg></div>
+  <div class="lu-leg">
+    <span><i style="border-color:var(--green);"></i> Key player</span>
+    <span><i style="border-color:var(--amber);background:rgba(255,184,48,.15);"></i> Captain</span>
+    <span><i style="border-color:var(--red);background:rgba(255,68,85,.12);"></i> Doubt</span>
+  </div>
+  <div class="lu-grid">
+    <div class="lu-col">
+      <div class="lu-col-hd">ARSENAL · 4–3–3</div>
+      ${[['22','DR','Raya','GK',''],['12','BW','Ben White','RB',''],['4','WS','Saliba','CB',''],['6','GM','Gabriel','CB','c'],['35','OZ','Zinchenko','LB','d'],['41','DR','Rice','DM',''],['8','MO','Ødegaard','CM',''],['7','BS','Saka','RW','k']].map(([n,i,nm,pos,t])=>`
+      <div class="lu-p"><div class="lu-num">${n}</div><div class="lu-av" style="background:rgba(200,16,46,.2);color:#c8102e;">${i}</div><div class="lu-name">${nm}</div><div class="lu-pos">${pos}</div>
+      ${t==='k'?'<div class="lu-tag k-tag">Key</div>':t==='c'?'<div class="lu-tag c-tag">Cap</div>':t==='d'?'<div class="lu-tag d-tag">Doubt</div>':''}</div>`).join('')}
+    </div>
+    <div class="lu-col">
+      <div class="lu-col-hd">TOTTENHAM · 4–2–3–1</div>
+      ${[['1','GV','Vicario','GK',''],['5','PP','Porro','RB',''],['17','CR','Romero','CB','d'],['15','MV','vd Ven','CB',''],['38','YB','Bissouma','DM',''],['10','JM','Maddison','CAM',''],['7','HS','Son','ST','k']].map(([n,i,nm,pos,t])=>`
+      <div class="lu-p"><div class="lu-num">${n}</div><div class="lu-av" style="background:rgba(19,34,87,.3);color:#4a7abf;">${i}</div><div class="lu-name">${nm}</div><div class="lu-pos">${pos}</div>
+      ${t==='k'?'<div class="lu-tag k-tag">Key</div>':t==='d'?'<div class="lu-tag d-tag">Doubt</div>':''}</div>`).join('')}
+    </div>
+  </div>
+  <div class="lu-ins"><div class="lu-ins-lbl">PITCHIQ LINEUP INSIGHT</div><div class="lu-ins-txt">Watch Saka vs Udogie — this duel will decide the game. Saka has created 4 chances in his last 2 home matches. Udogie has been exposed in wide areas recently. If Saka gets space early, Arsenal control this.</div></div>
+  <div class="nbar"><button class="nbtn-g" onclick="reqNotif()">🔔 Notify me at kickoff</button><button class="nbtn-gr">Share lineups</button></div>
+</div>`;}
+
+function rTx(t){
+  const clubs=t.from&&t.to?`<div class="tx-clubs"><div class="tx-club"><div class="tx-dot" style="background:${t.tc};"></div><span class="tx-cn">${t.to}</span></div><span class="tx-arrow">←</span><div class="tx-club"><div class="tx-dot" style="background:${t.fc||'#888'};"></div><span class="tx-cn">${t.from}</span></div></div>`:t.to?`<div class="tx-clubs"><div class="tx-club"><div class="tx-dot" style="background:${t.tc};"></div><span class="tx-cn">${t.to}</span></div></div>`:'';
+  return`<div class="tx" data-type="${t.tag}"><div class="tx-top"><span class="tx-tag ${t.cls}">${t.tag.toUpperCase()}</span><span class="tx-time">${t.time}</span></div><div class="tx-body">${t.body}</div>${clubs}<div class="tx-fee">${t.fee}</div></div>`;}
+
+function rOdds(o){return`<div class="od">
+  <div class="od-match">${o.m}</div><div class="od-lg">${o.lg}</div>
+  <div class="od-btns">
+    <div class="od-btn${o.h.b?' best':''}"><div class="od-out">HOME WIN</div><div class="od-val${o.h.b?' best':''}">${o.h.v}</div></div>
+    <div class="od-btn"><div class="od-out">DRAW</div><div class="od-val">${o.d.v}</div></div>
+    <div class="od-btn"><div class="od-out">AWAY WIN</div><div class="od-val">${o.a.v}</div></div>
+  </div>
+  <div class="bookies">${o.bk.map(b=>`<div class="bookie"><div class="bookie-n">${b.n}</div><div class="bookie-v">${b.v}</div></div>`).join('')}</div>
+  <div class="od-ins">${o.ins}</div>
+  <div class="od-disc">⚠ Bet safely · 18+ only · BeGambleAware.org · Odds subject to change</div>
+</div>`;}
+
+function rPlayer(p){return`<div class="plyr">
+  <div class="plyr-hd"><div class="plyr-av" style="background:${p.c}22;color:${p.c};">${p.i}</div>
+  <div><div class="plyr-name">${p.name}</div><div class="plyr-club">${p.club}</div><div class="plyr-pos">${p.pos}</div></div>
+  <div class="plyr-rtg"><div class="plyr-rtg-n">${p.rtg}</div><div class="plyr-rtg-l">avg rating</div></div></div>
+  <div class="plyr-stats">
+    <div class="plyr-stat"><div class="plyr-sn">${p.g}</div><div class="plyr-sl">Goals</div></div>
+    <div class="plyr-stat"><div class="plyr-sn">${p.a}</div><div class="plyr-sl">Assists</div></div>
+    <div class="plyr-stat"><div class="plyr-sn">${p.ch}</div><div class="plyr-sl">Chances</div></div>
+    <div class="plyr-stat"><div class="plyr-sn">${p.fit}</div><div class="plyr-sl">Fitness</div></div>
+  </div>
+  <div class="plyr-bars">${p.bars.map(b=>`<div class="plyr-br"><div class="plyr-bt"><span class="plyr-bl">${b.l}</span><span class="plyr-bv">${b.v}</span></div><div class="plyr-bg"><div class="plyr-bf" style="width:${b.p}%;background:${b.c};"></div></div></div>`).join('')}</div>
+</div>`;}
+
+function rFantasy(){return`<div class="fan">
+  <div class="fan-hd"><div class="fan-title">Top picks this gameweek</div><div class="fan-wk">GW33 · Apr 12–18</div></div>
+  ${D.fantasy.map(p=>`<div class="fan-p"><div class="fan-rank">${p.rank}</div><div class="fan-av" style="background:${p.bg};color:${p.fc};">${p.i}</div><div class="fan-info"><div class="fan-pn">${p.name}</div><div class="fan-pd">${p.det}</div></div><div style="text-align:right;"><div class="fan-pts">${p.pts}</div><div class="fan-ptsl">proj. pts</div></div></div>`).join('')}
+  <div class="fan-tip"><strong>Captain pick:</strong> Saka at home in north London derby — 3 goals in last 2 home games. Best projected 14 points this week.</div>
+</div>`;}
+
+function rHL(h){return`<div class="hl">
+  <div class="hl-thumb"><div style="position:absolute;inset:0;background:rgba(7,17,31,.6);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t3);">${h.m}</div><div class="hl-play" style="position:relative;z-index:2;"></div><div class="hl-dur">${h.dur}</div><div class="hl-src">YouTube</div></div>
+  <div class="hl-body"><div class="hl-title">${h.t}</div><div class="hl-meta">${h.m}</div><div class="hl-scorers">${h.s}</div></div>
+</div>`;}
+
+function rDigest(){const d=D.digest;return`<div class="dig">
+  <div class="dig-hero"><div class="dig-eye">WEEKLY DIGEST · ${d.wk}</div><div class="dig-title">WEEKEND WRAP</div><div class="dig-sub">Everything that mattered this week, explained simply</div>
+  <div class="dig-stats"><div class="dig-stat"><div class="dig-n">${d.matches}</div><div class="dig-l">Matches</div></div><div class="dig-stat"><div class="dig-n">${d.goals}</div><div class="dig-l">Goals</div></div><div class="dig-stat"><div class="dig-n">${d.upsets}</div><div class="dig-l">Upsets</div></div><div class="dig-stat"><div class="dig-n">${d.records}</div><div class="dig-l">Records</div></div></div></div>
+  <div style="padding:10px 14px 2px;font-size:9px;color:var(--t3);letter-spacing:.8px;">KEY MOMENTS</div>
+  ${d.moments.map(m=>`<div class="moment"><div class="moment-top"><span class="tx-tag ${m.cls}">${m.tag}</span><span style="font-size:10px;color:var(--t3);">${m.match}</span></div><div class="moment-h">${m.h}</div><div class="moment-d">${m.d}</div></div>`).join('')}
+  <div style="padding:12px 14px;"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;margin-bottom:8px;">DON'T MISS NEXT WEEK</div>
+  ${[['Liverpool vs Arsenal','Sat · '+TZA,'Liverpool 58%'],['Real Madrid vs Barcelona','Sun · '+TZA,'Draw 38%'],['Bayern vs Dortmund','Sat · '+TZA,'Bayern 71%'],['PSG vs Monaco','Sun · '+TZA,'PSG 72%']].map(([m,t,p])=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid rgba(128,128,128,.06);"><div style="font-size:13px;font-weight:500;color:var(--text);">${m}</div><div style="text-align:right;"><div style="font-size:10px;color:var(--t3);">${t}</div><div style="font-size:10px;color:var(--green);">${p}</div></div></div>`).join('')}
+  </div><div class="nbar"><button class="nbtn-g">Share this digest</button><button class="nbtn-gr">Save PDF</button></div>
+</div>`;}
+
+function rFZ(){return`<div class="fz">
+  <div class="reacts">
+    <div class="rbtn on" onclick="this.classList.toggle('on')"><span class="remoji">🔥</span><span class="rcount">2.4k</span></div>
+    <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">😂</span><span class="rcount">891</span></div>
+    <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">😤</span><span class="rcount">643</span></div>
+    <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">🎯</span><span class="rcount">412</span></div>
+    <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">💀</span><span class="rcount">278</span></div>
+  </div>
+  <div class="cinput-row"><div class="cav">You</div><input class="cinput" placeholder="Share your thoughts…" onkeydown="postC(event,this)"></div>
+  <div id="cList">
+    <div class="comment"><div class="c-av" style="background:rgba(200,16,46,.15);color:#c8102e;">KA</div><div class="c-body"><div class="c-hdr"><span class="c-name">Kampala_Arse</span><span class="c-badge" style="background:rgba(200,16,46,.12);color:#c8102e;">Arsenal fan</span><span class="c-time">12m ago</span></div><div class="c-txt">Saka is the best player in England right now. Nobody can argue this. 18 goals and 12 assists is ridiculous for a winger.</div><div class="c-acts"><div class="c-act liked">❤ 142</div><div class="c-act">Reply</div><div class="c-act">Share</div></div></div></div>
+    <div class="comment"><div class="c-av" style="background:rgba(19,34,87,.2);color:#4a7abf;">JM</div><div class="c-body"><div class="c-hdr"><span class="c-name">Jinja_Maddison</span><span class="c-badge" style="background:rgba(19,34,87,.12);color:#4a7abf;">Spurs fan</span><span class="c-time">8m ago</span></div><div class="c-txt">Same mistakes every week. At least Son showed up. We need a striker desperately.</div><div class="c-acts"><div class="c-act">❤ 87</div><div class="c-act">Reply</div><div class="c-act">Share</div></div></div></div>
+    <div class="comment"><div class="c-av" style="background:rgba(0,232,122,.1);color:var(--green);">AI</div><div class="c-body"><div class="c-hdr"><span class="c-name">PitchIQ Bot</span><span class="c-badge" style="background:var(--gdim);color:var(--green);">AI insight</span><span class="c-time">5m ago</span></div><div class="c-txt">Based on current stats, Arsenal have an 81% chance of holding this lead. Spurs would need 2 goals in 23 minutes — they've only done that once this season.</div><div class="c-acts"><div class="c-act">❤ 234</div><div class="c-act">Interesting</div></div></div></div>
+  </div>
+</div>`;}
+
+function rStandings(){return`<div class="st">
+  <div class="st-hd">Premier League Table</div>
+  <div style="display:flex;padding:4px 14px;border-bottom:0.5px solid var(--border);">
+    <div style="min-width:18px;"></div><div style="flex:1;font-size:9px;color:var(--t3);padding-left:20px;">Club</div>
+    <div style="min-width:22px;text-align:center;font-size:9px;color:var(--t3);">P</div><div style="min-width:22px;text-align:center;font-size:9px;color:var(--t3);">GD</div>
+    <div style="min-width:22px;text-align:center;font-size:9px;color:var(--t3);">Pts</div><div style="min-width:58px;text-align:center;font-size:9px;color:var(--t3);">Form</div>
+  </div>
+  ${D.standings.map((s,i)=>`<div class="st-row${i<2?' hl':''}">
+    <div class="st-pos">${s.pos}</div><div class="st-dot" style="background:${s.c};"></div>
+    <div class="st-name">${s.n}</div><div class="st-num">${s.p}</div><div class="st-num">${s.gd}</div>
+    <div class="st-pts">${s.pts}</div>
+    <div class="st-form">${s.f.map(f=>`<div class="sf sf-${f.toLowerCase()}">${f}</div>`).join('')}</div>
+  </div>`).join('')}
+  <div class="st-foot">View full table →</div>
+</div>`;}
+
+function rSBPreds(){return`<div style="margin-bottom:12px;"><div class="shd"><span class="shd-t">PREDICTIONS</span></div>${D.preds.slice(0,3).map(p=>rPred(p)).join('')}</div>`;}
+
+function rArts(){
+  const arts=[
+    {e:'⚽',tag:'Analysis',tb:'rgba(59,158,255,.12)',tc:'#3b9eff',title:'3 reasons Arsenal will win the title this year',meta:'5 min · 2h ago'},
+    {e:'📊',tag:'Explainer',tb:'rgba(255,184,48,.12)',tc:'#ffb830',title:'What xG actually means — and why it matters',meta:'3 min · 5h ago'},
+    {e:'🏆',tag:'World Cup',tb:'rgba(0,232,122,.1)',tc:'#00e87a',title:'48 teams, 104 matches: complete WC 2026 guide',meta:'8 min · 1h ago'},
+    {e:'🔥',tag:'Form Guide',tb:'rgba(255,68,85,.1)',tc:'#ff4455',title:"Salah vs Mbappé: who's been better this season?",meta:'4 min · 8h ago'},
+  ];
+  return`<div><div class="shd"><span class="shd-t">SMART READS</span><span class="shd-a">All →</span></div>${arts.map(a=>`<div class="art"><div class="art-thumb">${a.e}</div><div class="art-body"><div class="art-tag" style="background:${a.tb};color:${a.tc};">${a.tag.toUpperCase()}</div><div class="art-title">${a.title}</div><div class="art-meta">${a.meta}</div></div></div>`).join('')}</div>`;}
+
+// ── INTERACTIONS ──
+function fTx(el,type){
+  document.querySelectorAll('.itab').forEach(t=>t.classList.remove('on'));el.classList.add('on');
+  const list=document.getElementById('txList');if(!list)return;
+  const f=type==='all'?D.transfers:D.transfers.filter(t=>t.tag===type);
+  list.innerHTML=f.length?f.map(t=>rTx(t)).join(''):`<div style="padding:20px;text-align:center;color:var(--t3);font-size:13px;">No ${type} news right now</div>`;
+}
+
+function postC(e,input){
+  if(e.key!=='Enter'||!input.value.trim())return;
+  const txt=input.value.trim();
+  const list=document.getElementById('cList');if(!list)return;
+  list.insertAdjacentHTML('afterbegin',`<div class="comment fu"><div class="c-av" style="background:var(--gdim);color:var(--green);">You</div><div class="c-body"><div class="c-hdr"><span class="c-name">You</span><span class="c-time">just now</span></div><div class="c-txt">${txt.replace(/</g,'&lt;')}</div><div class="c-acts"><div class="c-act">❤ 0</div><div class="c-act">Reply</div></div></div></div>`);
+  input.value='';
+}
+
+function reqNotif(){
+  if('Notification' in window){Notification.requestPermission().then(p=>{if(p==='granted')alert('✅ You will be notified at kickoff!');});}
+}
+
+// ── LIVE MINUTE SIMULATION ──
+function simLive(){setInterval(()=>{document.querySelectorAll('.mc-min.lv').forEach(el=>{const t=el.textContent;if(t.includes("'")){const m=parseInt(t)||0;if(m<90)el.textContent=(m+1)+"'";}});},60000);}
+
+// ── INIT ──
+initTheme();
+initCookies();
+buildCal();
+render('live');
+simLive();
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
+<script src="api.js"></script>
+<script>
+// ═══════════════════════════════════════════
+// REAL DATA INTEGRATION
+// Runs after page loads — replaces demo data
+// ═══════════════════════════════════════════
+
+async function loadRealData() {
+  try {
+    // Show loading state
+    showLoadingState();
+
+    // Load in parallel to save API calls
+    const [liveMatches, todayFixtures, standings, calendarDates] = await Promise.all([
+      loadLiveMatches(),
+      loadTodayFixtures(window.curLg),
+      loadStandings('epl'),
+      loadCalendarDates()
+    ]);
+
+    // Update calendar with real fixture dates
+    if (calendarDates) updateCalendarDots(calendarDates);
+
+    // Update standings with real data + logos
+    if (standings) {
+      const sb = document.getElementById('sidebar');
+      if (sb) {
+        const stEl = sb.querySelector('.st');
+        if (stEl) stEl.outerHTML = renderRealStandings(standings);
+        else sb.innerHTML = renderRealStandings(standings) + sb.innerHTML;
+      }
+    }
+
+    // Update feed with real matches
+    const feed = document.getElementById('feed');
+    if (feed) {
+      const allMatches = [];
+
+      // Add live matches first
+      if (liveMatches && liveMatches.length > 0) {
+        allMatches.push(...liveMatches);
+      }
+
+      // Add today's upcoming fixtures
+      if (todayFixtures && todayFixtures.length > 0) {
+        const liveIds = new Set((liveMatches || []).map(m => m.id));
+        const upcoming = todayFixtures.filter(m => !liveIds.has(m.id));
+        allMatches.push(...upcoming);
+      }
+
+      if (allMatches.length > 0) {
+        // Find the match list section and replace
+        const matchSection = feed.querySelector('.shd');
+        if (matchSection) {
+          // Insert real matches after the section header
+          const existingCards = feed.querySelectorAll('.mc');
+          existingCards.forEach(c => c.remove());
+          const matchHtml = allMatches.map(m => renderRealMatch(m)).join('');
+          matchSection.insertAdjacentHTML('afterend', matchHtml);
+        }
+      } else {
+        // No matches today — show message
+        const existingCards = feed.querySelectorAll('.mc');
+        if (existingCards.length > 0) {
+          existingCards.forEach(c => c.remove());
+          const shd = feed.querySelector('.shd');
+          if (shd) shd.insertAdjacentHTML('afterend', `
+            <div style="padding:24px;text-align:center;color:var(--t3);background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:8px;">
+              <div style="font-size:24px;margin-bottom:8px;">⚽</div>
+              <div style="font-size:13px;font-weight:500;color:var(--t2);margin-bottom:4px;">No live matches right now</div>
+              <div style="font-size:12px;">Check the Today or upcoming fixtures tabs</div>
+            </div>`);
+        }
+      }
+    }
+
+    // Start live refresh
+    startLiveRefresh();
+
+    console.log('✅ Real data loaded successfully');
+
+  } catch(e) {
+    console.warn('Real data load failed, using demo data:', e);
+  }
+}
+
+function showLoadingState() {
+  const cards = document.querySelectorAll('.mc');
+  cards.forEach(c => {
+    c.style.opacity = '0.5';
+    c.style.pointerEvents = 'none';
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.mc').forEach(c => {
+      c.style.opacity = '';
+      c.style.pointerEvents = '';
+    });
+  }, 3000);
+}
+
+function updateCalendarDots(dates) {
+  const calDays = document.querySelectorAll('.cal-d');
+  const today = new Date();
+  calDays.forEach((day, i) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() + (i - 2));
+    const dateStr = d.toISOString().split('T')[0];
+    if (dates[dateStr] && dates[dateStr] > 0) {
+      day.classList.add('has');
+    }
+  });
+}
+
+// Override the goTab function to load real data when switching tabs
+const _originalGoTab = window.goTab;
+window.goTab = async function(el, tab) {
+  _originalGoTab(el, tab);
+  window.curTab = tab;
+
+  if (tab === 'live') {
+    const live = await loadLiveMatches();
+    if (live && live.length > 0) {
+      const feed = document.getElementById('feed');
+      const existingCards = feed.querySelectorAll('.mc');
+      existingCards.forEach(c => c.remove());
+      const shd = feed.querySelector('.shd');
+      if (shd) shd.insertAdjacentHTML('afterend', live.map(m => renderRealMatch(m)).join(''));
+    }
+  } else if (tab === 'today') {
+    const fixtures = await loadTodayFixtures(window.curLg);
+    if (fixtures && fixtures.length > 0) {
+      const feed = document.getElementById('feed');
+      const existingCards = feed.querySelectorAll('.mc');
+      existingCards.forEach(c => c.remove());
+      const shd = feed.querySelector('.shd');
+      if (shd) shd.insertAdjacentHTML('afterend', fixtures.map(m => renderRealMatch(m)).join(''));
+    }
+  }
+};
+
+// Load real data after page is ready
+window.addEventListener('load', () => {
+  setTimeout(loadRealData, 500);
+});
+</script>
