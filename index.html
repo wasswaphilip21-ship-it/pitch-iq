@@ -1,74 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PitchIQ — Smarter Football</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #07111f; --bg2: #0c1829; --green: #00ff87; --t1: #ffffff; --t2: rgba(255,255,255,0.7); --border: rgba(255,255,255,0.1); }
-        body { background: var(--bg); color: var(--t1); font-family: 'DM Sans', sans-serif; margin: 0; overflow-x: hidden; }
-        .page { display: none; padding: 20px; max-width: 800px; margin: 0 auto; }
-        .active-page { display: block; }
-        .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
-        .tab-bar { position: fixed; bottom: 0; width: 100%; background: var(--bg2); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid var(--border); z-index: 100; }
-        .tab { color: var(--t2); font-size: 12px; text-align: center; cursor: pointer; }
-        .tab.active { color: var(--green); font-weight: bold; }
-        iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.8); background: transparent; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PitchIQ — Smarter Football</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07111f;--bg2:#0c1829;--card:#0f1c2e;--border:rgba(255,255,255,.07);--green:#00e87a;--text:#eef2ff;--t2:rgba(238,242,255,.52);--head:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);margin:0;padding-bottom:60px;}
+.topbar{position:sticky;top:0;background:rgba(7,17,31,.95);backdrop-filter:blur(10px);padding:15px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;z-index:100;}
+.logo{font-family:var(--head);font-size:26px;color:var(--green);letter-spacing:1px;}
+.page{display:none;padding:15px;max-width:800px;margin:0 auto;}
+.page.on{display:block;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:12px;}
+.nav{position:fixed;bottom:0;width:100%;background:var(--bg2);display:flex;justify-content:space-around;padding:12px 0;border-top:1px solid var(--border);z-index:100;}
+.tab{color:var(--t2);font-size:12px;text-align:center;cursor:pointer;text-transform:uppercase;font-weight:600;}
+.tab.on{color:var(--green);}
+.lbar{padding:10px;display:flex;gap:8px;overflow-x:auto;background:var(--bg2);}
+.lp{padding:6px 15px;border-radius:20px;border:1px solid var(--border);white-space:nowrap;font-size:12px;cursor:pointer;}
+.lp.on{border-color:var(--green);color:var(--green);}
+iframe{filter:invert(0.9) hue-rotate(180deg) brightness(0.9);width:100%;height:600px;border:0;border-radius:12px;}
+</style>
 </head>
 <body>
 
-    <div style="padding: 20px; text-align: center; background: var(--bg2); border-bottom: 1px solid var(--border);">
-        <h1 style="font-family: 'Bebas Neue'; color: var(--green); margin: 0;">PITCHIQ</h1>
-        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; overflow-x: auto; padding-bottom: 5px;">
-            <button onclick="fT('epl')" style="background:none; border:1px solid var(--green); color:white; padding:5px 10px; border-radius:20px;">EPL</button>
-            <button onclick="fT('laliga')" style="background:none; border:1px solid var(--border); color:white; padding:5px 10px; border-radius:20px;">La Liga</button>
-            <button onclick="fT('seriea')" style="background:none; border:1px solid var(--border); color:white; padding:5px 10px; border-radius:20px;">Serie A</button>
-        </div>
-    </div>
+<div class="topbar">
+    <div class="logo">PITCHIQ</div>
+    <div style="font-size:10px; color:var(--green); border:1px solid var(--green); padding:2px 8px; border-radius:10px;">LIVE 2025</div>
+</div>
 
-    <div id="feed" class="page active-page">
-        <div id="matches-container">Loading today's matches...</div>
-    </div>
+<div class="lbar" id="league-switcher">
+    <div class="lp on" onclick="changeL('epl', this)">EPL</div>
+    <div class="lp" onclick="changeL('laliga', this)">La Liga</div>
+    <div class="lp" onclick="changeL('seriea', this)">Serie A</div>
+    <div class="lp" onclick="changeL('bundesliga', this)">Bundesliga</div>
+</div>
 
-    <div id="table" class="page">
-        <div id="table-container"></div>
-    </div>
+<div id="p-feed" class="page on">
+    <div id="feed-content">Loading today's matches...</div>
+</div>
 
-    <div id="transfers" class="page">
-        <div id="transfer-list">Loading transfer news...</div>
-    </div>
+<div id="p-table" class="page">
+    <div id="table-content"></div>
+</div>
 
-    <div class="tab-bar">
-        <div class="tab active" onclick="goTab('feed', this)">Feed</div>
-        <div class="tab" onclick="goTab('table', this)">Table</div>
-        <div class="tab" onclick="goTab('transfers', this)">News</div>
-    </div>
+<div id="p-preds" class="page">
+    <div id="preds-content">Loading AI insights...</div>
+</div>
 
-    <script src="api.js"></script>
-    <script>
-        function goTab(tabId, el) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            el.classList.add('active');
-            document.getElementById(tabId).classList.add('active-page');
-            
-            if(tabId === 'table') loadSofaTable('epl');
+<div class="nav">
+    <div class="tab on" onclick="go(this, 'p-feed')">Matches</div>
+    <div class="tab" onclick="go(this, 'p-table')">Standings</div>
+    <div class="tab" onclick="go(this, 'p-preds')">AI Tips</div>
+</div>
+
+<script src="api (3).js"></script>
+<script>
+    let currentL = 'epl';
+
+    function go(el, id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+        document.getElementById(id).classList.add('on');
+        el.classList.add('on');
+        if(id === 'p-table') updateTable();
+        if(id === 'p-preds') updatePreds();
+    }
+
+    function changeL(key, el) {
+        document.querySelectorAll('.lp').forEach(b => b.classList.remove('on'));
+        el.classList.add('on');
+        currentL = key;
+        refreshFeed();
+        if(document.getElementById('p-table').classList.contains('on')) updateTable();
+    }
+
+    async function refreshFeed() {
+        const container = document.getElementById('feed-content');
+        container.innerHTML = '<div style="text-align:center;padding:20px;">Updating fixtures...</div>';
+        const matches = await loadTodayFixtures(currentL);
+        renderMatches(matches, container);
+    }
+
+    function renderMatches(data, container) {
+        if(!data || data.length === 0) {
+            container.innerHTML = '<div class="card">No matches scheduled for today in this league.</div>';
+            return;
         }
+        container.innerHTML = data.map(m => `
+            <div class="card">
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--green);margin-bottom:8px;">
+                    <span>${m.fixture.status.long}</span>
+                    <span>${m.league.name}</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                    <div style="text-align:center;width:40%;"><img src="${m.teams.home.logo}" width="30"><br>${m.teams.home.name}</div>
+                    <div style="font-size:20px;font-weight:700;">${m.goals.home ?? 0} : ${m.goals.away ?? 0}</div>
+                    <div style="text-align:center;width:40%;"><img src="${m.teams.away.logo}" width="30"><br>${m.teams.away.name}</div>
+                </div>
+            </div>
+        `).join('');
+    }
 
-        function loadSofaTable(league) {
-            const sofaIdMap = { 'epl': 17, 'laliga': 8, 'seriea': 23 };
-            const id = sofaIdMap[league] || 17;
-            document.getElementById('table-container').innerHTML = `
-                <iframe src="https://www.sofascore.com/tournament/football/league/${id}/standings/embed" 
-                style="width:100%; height:600px; border:0; border-radius:12px;" scrolling="no"></iframe>`;
-        }
+    function updateTable() {
+        const ids = { epl: 17, laliga: 8, seriea: 23, bundesliga: 25 };
+        document.getElementById('table-content').innerHTML = `<iframe src="https://www.sofascore.com/tournament/football/league/${ids[currentL] || 17}/standings/embed"></iframe>`;
+    }
 
-        window.fT = function(leagueKey) {
-            if(typeof fetchMatches === 'function') fetchMatches(leagueKey);
-            if(document.getElementById('table').classList.contains('active-page')) loadSofaTable(leagueKey);
-        };
-    </script>
+    async function updatePreds() {
+        const container = document.getElementById('preds-content');
+        container.innerHTML = 'Analyzing form...';
+        const fixtures = await loadTodayFixtures(currentL);
+        const preds = await generatePredictions(fixtures);
+        if(!preds) { container.innerHTML = '<div class="card">AI analysis unavailable right now.</div>'; return; }
+        container.innerHTML = preds.map(p => `
+            <div class="card">
+                <div style="font-weight:600;margin-bottom:5px;">${p.match}</div>
+                <div style="font-size:12px;color:var(--green);">Tip: ${p.outcome} (${p.win}%)</div>
+                <div style="font-size:11px;color:var(--t2);margin-top:4px;">${p.reason}</div>
+            </div>
+        `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', refreshFeed);
+</script>
 </body>
 </html>
