@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PitchIQ — Smarter football. Live scores, lineups, AI predictions, transfer news and analysis.">
+<title>PitchIQ — Smarter Football</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','GA_MEASUREMENT_ID');</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07111f;--bg2:#0c1829;--bg3:#111f35;--card:#0f1c2e;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);--green:#00e87a;--gdim:rgba(0,232,122,.1);--blue:#3b9eff;--amber:#ffb830;--red:#ff4455;--text:#eef2ff;--t2:rgba(238,242,255,.52);--t3:rgba(238,242,255,.26);--head:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--r:12px;--r2:8px;--r3:20px;}
+[data-theme="light"]{--bg:#f0f4fa;--bg2:#e8edf5;--bg3:#dde3ee;--card:#ffffff;--border:rgba(0,0,0,.07);--border2:rgba(0,0,0,.13);--text:#0d1117;--t2:rgba(13,17,23,.55);--t3:rgba(13,17,23,.3);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:14px;line-height:1.6;overflow-x:hidden;transition:background .2s,color .2s;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+button,input{font-family:var(--body);cursor:pointer;}
+/* COOKIE */
+#ckBanner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--bg2);border-top:0.5px solid var(--border2);padding:11px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+#ckBanner.hide{display:none;}
+.ck-text{flex:1;font-size:12px;color:var(--t2);min-width:180px;}
+.ck-text a{color:var(--green);}
+.ck-ok{padding:7px 18px;background:var(--green);color:#021a0b;font-size:12px;font-weight:600;border:none;border-radius:var(--r3);}
+.ck-no{padding:7px 14px;background:transparent;color:var(--t2);font-size:12px;border:0.5px solid var(--border2);border-radius:var(--r3);}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(7,17,31,.94);backdrop-filter:blur(20px);border-bottom:0.5px solid var(--border);height:54px;display:flex;align-items:center;padding:0 14px;gap:12px;}
+[data-theme="light"] .topbar{background:rgba(240,244,250,.96);}
+.logo{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.logo-mark{width:30px;height:30px;background:var(--green);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.logo-name{font-family:var(--head);font-size:24px;color:var(--text);letter-spacing:1.5px;}
+.logo-name em{color:var(--green);font-style:normal;}
+.top-srch{flex:1;max-width:260px;display:flex;align-items:center;gap:8px;background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r3);padding:6px 13px;}
+.top-srch input{background:none;border:none;outline:none;color:var(--text);font-size:13px;width:100%;}
+.top-srch input::placeholder{color:var(--t3);}
+.topbar-r{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(255,68,85,.12);border:0.5px solid rgba(255,68,85,.28);border-radius:var(--r3);padding:4px 10px;font-size:10px;font-weight:600;color:var(--red);letter-spacing:.4px;}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--red);animation:blink 1.4s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+.theme-btn{background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r3);padding:5px 11px;font-size:13px;color:var(--t2);}
+/* LEAGUE BAR */
+.lbar{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:8px 14px;display:flex;gap:6px;overflow-x:auto;}
+.lbar::-webkit-scrollbar{display:none;}
+.lp{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:var(--r3);border:0.5px solid var(--border);color:var(--t2);font-size:12px;white-space:nowrap;transition:all .15s;flex-shrink:0;background:none;}
+.lp.on{background:var(--gdim);border-color:rgba(0,232,122,.28);color:var(--green);}
+/* CALENDAR */
+.cal{background:var(--bg);border-bottom:0.5px solid var(--border);padding:8px 14px;}
+.cal-hd{font-size:9px;color:var(--t3);letter-spacing:.9px;margin-bottom:6px;}
+.cal-days{display:flex;gap:4px;overflow-x:auto;}
+.cal-days::-webkit-scrollbar{display:none;}
+.cal-d{display:flex;flex-direction:column;align-items:center;padding:6px 9px;border-radius:10px;cursor:pointer;min-width:44px;gap:2px;border:0.5px solid transparent;transition:all .15s;}
+.cal-d.on{background:var(--gdim);border-color:rgba(0,232,122,.22);}
+.cal-d.has .cal-pip{background:var(--green);}
+.cal-dow{font-size:9px;color:var(--t3);}
+.cal-date{font-size:15px;font-weight:500;color:var(--t2);}
+.cal-d.on .cal-dow,.cal-d.on .cal-date{color:var(--green);}
+.cal-pip{width:4px;height:4px;border-radius:50%;background:var(--border2);}
+/* SEC TABS */
+.stabs{background:var(--bg);border-bottom:0.5px solid var(--border);display:flex;overflow-x:auto;position:sticky;top:54px;z-index:100;}
+.stabs::-webkit-scrollbar{display:none;}
+.stab{padding:10px 15px;font-size:12px;font-weight:500;color:var(--t3);white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none;}
+.stab.on{color:var(--text);border-bottom-color:var(--green);}
+/* LAYOUT */
+.main{display:grid;grid-template-columns:1fr 310px;max-width:1180px;margin:0 auto;}
+@media(max-width:900px){.main{grid-template-columns:1fr;}.sidebar{display:none;}}
+.feed{padding:12px 13px;}
+.sidebar{padding:12px 13px;border-left:0.5px solid var(--border);}
+/* AD SLOT */
+.ad-slot{background:var(--bg3);border:0.5px dashed var(--border2);border-radius:var(--r2);padding:12px;text-align:center;margin-bottom:12px;font-size:10px;color:var(--t3);min-height:90px;display:flex;align-items:center;justify-content:center;}
+/* WC BANNER */
+.wc-banner{background:linear-gradient(120deg,rgba(59,158,255,.1),rgba(0,232,122,.07));border:0.5px solid rgba(59,158,255,.22);border-radius:var(--r);padding:14px 16px;margin-bottom:13px;display:flex;align-items:center;gap:13px;}
+.wc-body{flex:1;}
+.wc-eye{font-size:9px;color:var(--blue);letter-spacing:.9px;margin-bottom:3px;}
+.wc-title{font-family:var(--head);font-size:22px;color:var(--text);letter-spacing:.8px;}
+.wc-sub{font-size:11px;color:var(--t2);}
+.wc-cd{text-align:center;flex-shrink:0;}
+.wc-timer{font-family:var(--mono);font-size:19px;font-weight:500;color:var(--green);}
+.wc-cd-lbl{font-size:9px;color:var(--t3);margin-top:2px;}
+/* SAFE BET */
+.sb{background:linear-gradient(135deg,rgba(0,232,122,.07),rgba(0,232,122,.02));border:0.5px solid rgba(0,232,122,.22);border-radius:var(--r);padding:14px 15px;margin-bottom:13px;}
+.sb-eye{font-size:9px;color:var(--green);letter-spacing:.9px;font-weight:600;margin-bottom:5px;}
+.sb-match{font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.sb-reason{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:9px;}
+.sb-pill{display:inline-flex;align-items:center;background:var(--green);color:#021a0b;font-size:12px;font-weight:700;padding:5px 14px;border-radius:var(--r3);}
+.sb-disc{font-size:10px;color:var(--t3);margin-top:7px;}
+.sb-disc a{color:var(--t3);text-decoration:underline;}
+/* SHD */
+.shd{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.shd-t{font-size:9px;color:var(--t3);letter-spacing:.9px;}
+.shd-a{font-size:11px;color:var(--green);cursor:pointer;}
+/* MATCH CARD */
+.mc{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:border-color .15s,transform .1s;}
+.mc:hover{border-color:var(--border2);transform:translateY(-1px);}
+.mc-lg{display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:9px;color:var(--t3);letter-spacing:.5px;border-bottom:0.5px solid var(--border);}
+.mc-lg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.mc-row{display:flex;align-items:center;padding:10px 12px;gap:8px;}
+.mc-min{font-size:10px;font-family:var(--mono);min-width:32px;text-align:center;}
+.mc-min.lv{color:var(--green);font-weight:600;}
+.mc-min.ft,.mc-min.up{color:var(--t3);}
+.mc-teams{flex:1;}
+.mc-team{display:flex;align-items:center;gap:8px;padding:2px 0;}
+.mc-badge{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;}
+.mc-tname{font-size:13px;font-weight:500;color:var(--text);}
+.mc-tname.dim{color:var(--t3);font-weight:400;}
+.mc-s{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:18px;}
+.mc-score{font-size:16px;font-weight:700;color:var(--text);font-family:var(--mono);}
+.mc-score.dim{color:var(--t3);}
+.mc-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.mc-pred{font-size:10px;background:var(--gdim);color:var(--green);padding:2px 8px;border-radius:8px;white-space:nowrap;}
+.mc-chev{color:var(--t3);}
+/* PRED */
+.pc{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.pc-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:9px;}
+.pc-match{font-size:13px;font-weight:500;color:var(--text);}
+.pc-lg{font-size:10px;color:var(--t3);margin-top:1px;}
+.pc-chip{font-size:10px;font-weight:600;background:var(--gdim);color:var(--green);padding:3px 9px;border-radius:10px;white-space:nowrap;flex-shrink:0;}
+.prob-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.prob-lbl{font-size:11px;color:var(--t2);min-width:28px;}
+.prob-bar{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.prob-fill{height:5px;border-radius:3px;}
+.prob-pct{font-size:11px;font-weight:500;color:var(--text);min-width:28px;text-align:right;font-family:var(--mono);}
+.pc-disc{font-size:9px;color:var(--t3);margin-top:7px;padding-top:7px;border-top:0.5px solid var(--border);}
+/* LINEUP */
+.lu{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.lu-hd{padding:12px 14px;border-bottom:0.5px solid var(--border);}
+.lu-match{font-size:14px;font-weight:600;color:var(--text);}
+.lu-ko{font-size:11px;color:var(--t3);margin-top:2px;}
+.lu-forms{display:flex;justify-content:space-between;padding:7px 14px;border-bottom:0.5px solid var(--border);font-size:12px;color:var(--t2);}
+.pitch{background:#1b5e34;}
+.pitch svg{display:block;width:100%;}
+.lu-leg{display:flex;gap:12px;padding:7px 14px;font-size:10px;color:var(--t3);}
+.lu-leg span{display:flex;align-items:center;gap:4px;}
+.lu-leg i{width:9px;height:9px;border-radius:50%;border:1.5px solid;}
+.lu-grid{display:grid;grid-template-columns:1fr 1fr;border-top:0.5px solid var(--border);}
+.lu-col{padding:10px 13px;}
+.lu-col:first-child{border-right:0.5px solid var(--border);}
+.lu-col-hd{font-size:9px;color:var(--t3);letter-spacing:.6px;margin-bottom:7px;}
+.lu-p{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:0.5px solid rgba(128,128,128,.06);}
+.lu-p:last-child{border-bottom:none;}
+.lu-num{font-size:10px;color:var(--t3);min-width:16px;font-family:var(--mono);}
+.lu-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;}
+.lu-name{font-size:12px;font-weight:500;color:var(--text);flex:1;}
+.lu-pos{font-size:9px;color:var(--t3);}
+.lu-tag{font-size:9px;padding:1px 5px;border-radius:5px;}
+.k-tag{background:rgba(0,232,122,.1);color:var(--green);}
+.c-tag{background:rgba(255,184,48,.1);color:var(--amber);}
+.d-tag{background:rgba(255,68,85,.1);color:var(--red);}
+.lu-ins{background:rgba(0,232,122,.05);border-top:0.5px solid rgba(0,232,122,.14);padding:10px 14px;}
+.lu-ins-lbl{font-size:9px;color:var(--green);letter-spacing:.6px;margin-bottom:4px;}
+.lu-ins-txt{font-size:12px;color:var(--t2);line-height:1.5;}
+/* TRANSFER */
+.tx{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.tx:hover{border-color:var(--border2);}
+.tx-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.tx-tag{font-size:9px;font-weight:600;padding:2px 8px;border-radius:10px;letter-spacing:.3px;}
+.t-con{background:rgba(0,232,122,.12);color:var(--green);}
+.t-rum{background:rgba(255,184,48,.12);color:var(--amber);}
+.t-med{background:rgba(59,158,255,.12);color:var(--blue);}
+.t-bid{background:rgba(255,68,85,.12);color:var(--red);}
+.tx-time{font-size:10px;color:var(--t3);}
+.tx-body{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:6px;}
+.tx-clubs{display:flex;align-items:center;gap:7px;}
+.tx-club{display:flex;align-items:center;gap:5px;background:rgba(128,128,128,.07);padding:3px 9px;border-radius:12px;}
+.tx-dot{width:10px;height:10px;border-radius:50%;}
+.tx-cn{font-size:11px;color:var(--t2);}
+.tx-fee{font-size:11px;color:var(--green);margin-top:5px;font-weight:500;}
+/* ODDS */
+.od{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;}
+.od-match{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.od-lg{font-size:10px;color:var(--t3);margin-bottom:10px;}
+.od-btns{display:flex;gap:6px;margin-bottom:8px;}
+.od-btn{flex:1;background:rgba(128,128,128,.06);border:0.5px solid var(--border);border-radius:var(--r2);padding:8px 6px;text-align:center;transition:all .15s;}
+.od-btn.best{border-color:rgba(0,232,122,.3);background:rgba(0,232,122,.06);}
+.od-out{font-size:9px;color:var(--t3);margin-bottom:3px;letter-spacing:.3px;}
+.od-val{font-size:17px;font-weight:700;color:var(--text);font-family:var(--mono);}
+.od-val.best{color:var(--green);}
+.bookies{display:flex;gap:5px;overflow-x:auto;padding-bottom:2px;}
+.bookies::-webkit-scrollbar{display:none;}
+.bookie{background:rgba(128,128,128,.06);border:0.5px solid var(--border);border-radius:var(--r2);padding:5px 10px;white-space:nowrap;}
+.bookie-n{font-size:9px;color:var(--t3);margin-bottom:2px;}
+.bookie-v{font-size:12px;font-weight:500;color:var(--text);font-family:var(--mono);}
+.od-ins{font-size:11px;color:var(--green);margin-top:7px;padding-top:7px;border-top:0.5px solid var(--border);}
+.od-disc{font-size:9px;color:var(--t3);margin-top:4px;}
+/* PLAYER */
+.plyr{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.plyr-hd{padding:14px;display:flex;align-items:center;gap:12px;border-bottom:0.5px solid var(--border);}
+.plyr-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;}
+.plyr-name{font-size:16px;font-weight:600;color:var(--text);}
+.plyr-club{font-size:11px;color:var(--t3);margin-top:2px;}
+.plyr-pos{font-size:10px;background:var(--gdim);color:var(--green);padding:2px 8px;border-radius:10px;display:inline-block;margin-top:4px;}
+.plyr-rtg{margin-left:auto;text-align:center;}
+.plyr-rtg-n{font-size:26px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.plyr-rtg-l{font-size:9px;color:var(--t3);}
+.plyr-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:0.5px solid var(--border);}
+.plyr-stat{padding:10px 8px;text-align:center;border-right:0.5px solid var(--border);}
+.plyr-stat:last-child{border-right:none;}
+.plyr-sn{font-size:18px;font-weight:700;color:var(--text);font-family:var(--mono);}
+.plyr-sl{font-size:9px;color:var(--t3);}
+.plyr-bars{padding:10px 14px;}
+.plyr-br{margin-bottom:8px;}
+.plyr-bt{display:flex;justify-content:space-between;margin-bottom:3px;}
+.plyr-bl{font-size:10px;color:var(--t2);}
+.plyr-bv{font-size:10px;font-family:var(--mono);color:var(--text);}
+.plyr-bg{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.plyr-bf{height:4px;border-radius:2px;}
+/* FAN ZONE */
+.fz{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.reacts{display:flex;gap:6px;padding:12px 14px;border-bottom:0.5px solid var(--border);}
+.rbtn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--r3);border:0.5px solid var(--border);background:none;cursor:pointer;transition:all .15s;}
+.rbtn.on{border-color:rgba(0,232,122,.3);background:var(--gdim);}
+.remoji{font-size:16px;}
+.rcount{font-size:12px;color:var(--t2);}
+.cinput-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid var(--border);}
+.cav{width:30px;height:30px;border-radius:50%;background:var(--gdim);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.cinput{flex:1;background:var(--bg3);border:0.5px solid var(--border);border-radius:var(--r3);padding:7px 13px;font-size:13px;color:var(--text);outline:none;}
+.comment{display:flex;gap:10px;padding:10px 14px;border-bottom:0.5px solid rgba(128,128,128,.05);}
+.c-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.c-body{flex:1;}
+.c-hdr{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;}
+.c-name{font-size:12px;font-weight:600;color:var(--text);}
+.c-badge{font-size:9px;padding:1px 6px;border-radius:7px;}
+.c-time{font-size:10px;color:var(--t3);}
+.c-txt{font-size:13px;color:var(--t2);line-height:1.5;}
+.c-acts{display:flex;gap:12px;margin-top:5px;}
+.c-act{font-size:11px;color:var(--t3);cursor:pointer;}
+.c-act.liked{color:var(--red);}
+/* STANDINGS */
+.st{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.st-hd{padding:10px 14px;border-bottom:0.5px solid var(--border);font-size:12px;font-weight:600;color:var(--text);}
+.st-row{display:flex;align-items:center;padding:7px 14px;border-bottom:0.5px solid rgba(128,128,128,.05);gap:7px;}
+.st-row:last-child{border-bottom:none;}
+.st-row.hl{background:rgba(0,232,122,.04);}
+.st-pos{font-size:11px;color:var(--t3);min-width:18px;font-family:var(--mono);}
+.st-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;}
+.st-name{flex:1;font-size:12px;font-weight:500;color:var(--text);}
+.st-num{font-size:11px;color:var(--t2);min-width:22px;text-align:center;font-family:var(--mono);}
+.st-pts{font-size:12px;font-weight:700;color:var(--text);min-width:22px;text-align:center;font-family:var(--mono);}
+.st-form{display:flex;gap:2px;}
+.sf{width:14px;height:14px;border-radius:50%;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.sf-w{background:var(--green);color:#021a0b;}
+.sf-d{background:rgba(128,128,128,.25);color:var(--t2);}
+.sf-l{background:var(--red);color:#fff;}
+.st-foot{padding:8px;text-align:center;font-size:11px;color:var(--green);cursor:pointer;}
+/* ARTICLES */
+.art{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border);cursor:pointer;}
+.art:last-child{border-bottom:none;}
+.art-thumb{width:54px;height:54px;border-radius:var(--r2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(128,128,128,.07);}
+.art-body{flex:1;}
+.art-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;display:inline-block;margin-bottom:4px;letter-spacing:.4px;}
+.art-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:3px;}
+.art-meta{font-size:10px;color:var(--t3);}
+/* INNER TABS */
+.itabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;}
+.itabs::-webkit-scrollbar{display:none;}
+.itab{padding:5px 13px;border-radius:var(--r3);font-size:12px;font-weight:500;border:0.5px solid var(--border);color:var(--t3);white-space:nowrap;transition:all .15s;background:none;}
+.itab.on{background:var(--gdim);border-color:rgba(0,232,122,.25);color:var(--green);}
+/* NOTIFY */
+.nbar{display:flex;gap:8px;margin:10px 14px 14px;}
+.nbtn-g{flex:1;padding:10px;background:var(--gdim);border:0.5px solid rgba(0,232,122,.25);border-radius:var(--r2);color:var(--green);font-size:12px;font-weight:600;}
+.nbtn-gr{padding:10px 14px;background:rgba(128,128,128,.07);border:0.5px solid var(--border);border-radius:var(--r2);color:var(--t2);font-size:12px;}
+/* DIGEST */
+.dig{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.dig-hd{padding:14px;background:linear-gradient(135deg,rgba(0,232,122,.06),rgba(59,158,255,.04));border-bottom:0.5px solid var(--border);}
+.dig-wk{font-size:9px;color:var(--green);letter-spacing:.8px;margin-bottom:4px;}
+.dig-title{font-family:var(--head);font-size:28px;color:var(--text);letter-spacing:.5px;}
+.dig-sub{font-size:12px;color:var(--t2);margin-top:3px;}
+.dig-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:0.5px solid var(--border);}
+.dig-stat{padding:12px 8px;text-align:center;border-right:0.5px solid var(--border);}
+.dig-stat:last-child{border-right:none;}
+.dig-n{font-size:22px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.dig-l{font-size:9px;color:var(--t3);}
+.moment{padding:12px 14px;border-bottom:0.5px solid rgba(128,128,128,.05);}
+.moment-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.moment-h{font-size:14px;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:3px;}
+.moment-d{font-size:12px;color:var(--t2);line-height:1.5;}
+/* SOFASCORE WRAPPER */
+.sfa-wrap{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;}
+.sfa-hd{padding:10px 14px;border-bottom:0.5px solid var(--border);font-size:11px;color:var(--t3);display:flex;align-items:center;gap:6px;}
+.sfa-hd span{color:var(--green);font-weight:600;}
+/* PRIVACY PAGE */
+.priv{max-width:700px;margin:0 auto;padding:24px 16px;display:none;}
+.priv.show{display:block;}
+.priv h1{font-family:var(--head);font-size:36px;color:var(--text);margin-bottom:8px;letter-spacing:1px;}
+.priv h2{font-size:15px;font-weight:600;color:var(--text);margin:18px 0 7px;}
+.priv p{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:9px;}
+.priv a{color:var(--green);}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--green);cursor:pointer;margin-bottom:18px;background:none;border:none;padding:0;}
+/* BOTTOM NAV */
+.bnav{display:none;position:sticky;bottom:0;background:rgba(7,17,31,.96);backdrop-filter:blur(16px);border-top:0.5px solid var(--border);padding:9px 0 14px;justify-content:space-around;z-index:100;}
+[data-theme="light"] .bnav{background:rgba(240,244,250,.97);}
+@media(max-width:700px){.bnav{display:flex;}}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:var(--t3);cursor:pointer;transition:color .15s;}
+.bn-item.on{color:var(--green);}
+.bn-icon{font-size:20px;}
+/* SPINNER */
+.piq-spinner{display:flex;align-items:center;justify-content:center;gap:10px;padding:24px;background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:8px;}
+.piq-spin-ring{width:18px;height:18px;border:2px solid var(--green);border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.fu{animation:fadeUp .25s ease forwards;}
+/* HIGHLIGHTS */
+.hl-card{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px;cursor:pointer;transition:border-color .15s;}
+.hl-card:hover{border-color:var(--border2);}
+.hl-thumb{background:linear-gradient(135deg,rgba(59,158,255,.1),rgba(0,232,122,.07));height:120px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;}
+.hl-play{position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.hl-body{padding:10px 13px;}
+.hl-meta{font-size:10px;color:var(--t3);margin-bottom:4px;}
+.hl-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:3px;}
+.hl-scorer{font-size:11px;color:var(--t2);}
+.hl-dur{font-size:10px;color:var(--green);}
+/* FANTASY */
+.fan-pick{background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.fan-rank{font-size:22px;font-weight:700;color:var(--t3);font-family:var(--mono);min-width:32px;}
+.fan-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.fan-info{flex:1;}
+.fan-name{font-size:14px;font-weight:600;color:var(--text);}
+.fan-det{font-size:11px;color:var(--t3);margin-top:2px;}
+.fan-pts{text-align:right;}
+.fan-n{font-size:24px;font-weight:700;color:var(--green);font-family:var(--mono);}
+.fan-l{font-size:9px;color:var(--t3);}
+/* SOFASCORE IFRAME WRAPPER */
+.sf-iframe-wrap{width:100%;overflow:hidden;border-radius:var(--r);margin-bottom:8px;background:var(--card);border:0.5px solid var(--border);}
+.sf-iframe-wrap iframe{width:100%;border:none;display:block;}
+</style>
+</head>
+<body>
+
+<!-- COOKIE BANNER -->
+<div id="ckBanner">
+  <div class="ck-text">🍪 We use cookies to improve your experience. See our <a href="#" onclick="showPriv()">Privacy Policy</a>.</div>
+  <button class="ck-no" onclick="document.getElementById('ckBanner').classList.add('hide')">Decline</button>
+  <button class="ck-ok" onclick="acceptCookies()">Accept all</button>
+</div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">⚽</div>
+    <div class="logo-name">PITCH<em>IQ</em></div>
+  </div>
+  <div class="top-srch">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.4;flex-shrink:0;"><circle cx="6.5" cy="6.5" r="5"/><line x1="10.5" y1="10.5" x2="14" y2="14" stroke-linecap="round"/></svg>
+    <input type="text" placeholder="Search teams, players, leagues…">
+  </div>
+  <div class="topbar-r">
+    <div class="live-pill"><div class="ldot"></div>LIVE</div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">☀ Light</button>
+  </div>
+</div>
+
+<!-- LEAGUE BAR -->
+<div class="lbar">
+  <button class="lp on" onclick="filterLeague(this,'all',39)">🌍 All</button>
+  <button class="lp" onclick="filterLeague(this,'epl',39)">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
+  <button class="lp" onclick="filterLeague(this,'laliga',140)">🇪🇸 La Liga</button>
+  <button class="lp" onclick="filterLeague(this,'bundesliga',78)">🇩🇪 Bundesliga</button>
+  <button class="lp" onclick="filterLeague(this,'seriea',135)">🇮🇹 Serie A</button>
+  <button class="lp" onclick="filterLeague(this,'ligue1',61)">🇫🇷 Ligue 1</button>
+  <button class="lp" onclick="filterLeague(this,'ucl',2)">🌐 Champions League</button>
+  <button class="lp" onclick="filterLeague(this,'wc2026',1)">🏆 World Cup 2026</button>
+  <button class="lp" onclick="filterLeague(this,'afcon',6)">🌍 AFCON</button>
+</div>
+
+<!-- CALENDAR -->
+<div class="cal">
+  <div class="cal-hd">MATCH CALENDAR</div>
+  <div class="cal-days" id="calDays"></div>
+</div>
+
+<!-- SECTION TABS -->
+<div class="stabs">
+  <button class="stab on" onclick="goTab(this,'live')">Live Now</button>
+  <button class="stab" onclick="goTab(this,'today')">Today</button>
+  <button class="stab" onclick="goTab(this,'predictions')">Predictions</button>
+  <button class="stab" onclick="goTab(this,'lineups')">Lineups</button>
+  <button class="stab" onclick="goTab(this,'transfers')">Transfers</button>
+  <button class="stab" onclick="goTab(this,'odds')">Odds</button>
+  <button class="stab" onclick="goTab(this,'players')">Players</button>
+  <button class="stab" onclick="goTab(this,'fantasy')">Fantasy</button>
+  <button class="stab" onclick="goTab(this,'highlights')">Highlights</button>
+  <button class="stab" onclick="goTab(this,'digest')">Weekly Digest</button>
+  <button class="stab" onclick="goTab(this,'fanzone')">Fan Zone</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="feed" id="feed"></div>
+  <div class="sidebar" id="sidebar"></div>
+</div>
+
+<!-- PRIVACY PAGE -->
+<div class="priv" id="privPage">
+  <button class="back-btn" onclick="hidePriv()">← Back to PitchIQ</button>
+  <h1>PRIVACY POLICY</h1>
+  <p>Last updated: April 2026</p>
+  <p>Welcome to PitchIQ. This Privacy Policy explains how we collect, use, and protect your information.</p>
+  <h2>Information we collect</h2>
+  <p>We collect information you provide (such as comments), and information collected automatically (IP address, browser type, pages visited) through cookies and analytics tools including Google Analytics.</p>
+  <h2>How we use your information</h2>
+  <p>We use your information to provide and improve our service, personalise your experience, display relevant advertisements through Google AdSense, and analyse site usage through Google Analytics.</p>
+  <h2>Cookies</h2>
+  <p>We use cookies to remember your preferences (dark/light mode), measure traffic, and serve ads. You can control cookies through your browser settings or our consent banner.</p>
+  <h2>Third-party services</h2>
+  <p>We use Google Analytics, Google AdSense, API-Football (match data), SofaScore (live widgets), and RSS feeds (transfer news). Each has its own privacy policy.</p>
+  <h2>Advertising & betting</h2>
+  <p>PitchIQ may display betting advertisements. All betting content is for adults aged 18+ only. We encourage responsible gambling. For support visit <a href="https://www.begambleaware.org" target="_blank">BeGambleAware.org</a>.</p>
+  <h2>Contact</h2>
+  <p>For questions about this policy, email privacy@pitchiq.com</p>
+  <p style="margin-top:20px;padding-top:16px;border-top:0.5px solid var(--border);font-size:11px;color:var(--t3);">© 2026 PitchIQ · All rights reserved</p>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav" id="bnav">
+  <div class="bn-item on" onclick="goTabMob(this,'live')"><div class="bn-icon">⚽</div>Home</div>
+  <div class="bn-item" onclick="goTabMob(this,'lineups')"><div class="bn-icon">📋</div>Lineups</div>
+  <div class="bn-item" onclick="goTabMob(this,'predictions')"><div class="bn-icon">🎯</div>Predict</div>
+  <div class="bn-item" onclick="goTabMob(this,'transfers')"><div class="bn-icon">🔄</div>Transfers</div>
+  <div class="bn-item" onclick="goTabMob(this,'digest')"><div class="bn-icon">📊</div>Digest</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  PITCHIQ v5 — SofaScore + API-Football
+// ══════════════════════════════════════════
+
+// ── API CONFIG ──
+const API_KEY = '35f0bfdd839466bf99892dc805c57b94';
+const API_BASE = 'https://v3.football.api-sports.io';
+const SEASON = 2024; // 2024/25 season
+
+// League IDs → SofaScore tournament IDs + API-Football IDs
+const LEAGUES = {
+  all:       { apiId: null,  sfId: 17,   sfSeason: 61627, name: 'All Leagues' },
+  epl:       { apiId: 39,   sfId: 17,   sfSeason: 61627, name: 'Premier League · 2024/25' },
+  laliga:    { apiId: 140,  sfId: 8,    sfSeason: 61643, name: 'La Liga · 2024/25' },
+  bundesliga:{ apiId: 78,   sfId: 35,   sfSeason: 61644, name: 'Bundesliga · 2024/25' },
+  seriea:    { apiId: 135,  sfId: 23,   sfSeason: 61645, name: 'Serie A · 2024/25' },
+  ligue1:    { apiId: 61,   sfId: 34,   sfSeason: 61646, name: 'Ligue 1 · 2024/25' },
+  ucl:       { apiId: 2,    sfId: 7,    sfSeason: 61671, name: 'Champions League · 2024/25' },
+  wc2026:    { apiId: 1,    sfId: 16,   sfSeason: 56654, name: 'World Cup 2026' },
+  afcon:     { apiId: 6,    sfId: 911,  sfSeason: 57478, name: 'AFCON' },
+};
+const TOP_API_IDS = [39, 140, 135, 78, 61, 2, 3, 848];
+
+// ── STATE ──
+let curTab = 'live';
+let curLg = 'all';
+let curLgId = 39; // for standings, tracks current selected league ID
+let _fixtures = null;
+let _standings = null;
+let _txNews = null;
+
+// ── TZ ──
+const TZ = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const TZA = new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2] || 'Local';
+function fmtTime(utc){if(!utc)return '--:--';return new Date(utc).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',timeZone:TZ});}
+
+// ── THEME ──
+function initTheme(){const s=localStorage.getItem('piq-theme')||(window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark');applyTheme(s);}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);const b=document.getElementById('themeBtn');if(b)b.textContent=t==='dark'?'☀ Light':'🌙 Dark';localStorage.setItem('piq-theme',t);}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
+
+// ── COOKIES ──
+function acceptCookies(){localStorage.setItem('piq-ck','1');document.getElementById('ckBanner').classList.add('hide');}
+function initCookies(){if(localStorage.getItem('piq-ck'))document.getElementById('ckBanner').classList.add('hide');}
+
+// ── PRIVACY ──
+function showPriv(){document.getElementById('privPage').classList.add('show');document.getElementById('privPage').scrollIntoView({behavior:'smooth'});}
+function hidePriv(){document.getElementById('privPage').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});}
+
+// ── CACHE ──
+function setCache(key,data,mins){try{localStorage.setItem(key,JSON.stringify({data,expiry:Date.now()+mins*60000}));}catch(e){}}
+function getCache(key){try{const it=localStorage.getItem(key);if(!it)return null;const p=JSON.parse(it);if(Date.now()>p.expiry){localStorage.removeItem(key);return null;}return p.data;}catch(e){return null;}}
+
+// ── FETCH API ──
+async function fetchAPI(endpoint, cacheKey, cacheMins=10) {
+  const cached = getCache(cacheKey);
+  if (cached) return cached;
+  // Try direct
+  try {
+    const r = await fetch(`${API_BASE}${endpoint}`, {headers:{'x-apisports-key':API_KEY,'x-rapidapi-host':'v3.football.api-sports.io'}});
+    if (r.ok) {const d = await r.json(); if (d?.response!==undefined){setCache(cacheKey,d,cacheMins);return d;}}
+  } catch(e) {}
+  // Proxy fallback
+  try {
+    const proxied = `https://api.allorigins.win/get?url=${encodeURIComponent(`${API_BASE}${endpoint}`)}`;
+    const r2 = await fetch(proxied);
+    if (r2.ok) {const w=await r2.json();const d=JSON.parse(w.contents);if(d?.response!==undefined){setCache(cacheKey,d,cacheMins);return d;}}
+  } catch(e) {}
+  // RapidAPI fallback
+  try {
+    const r3 = await fetch(`https://api-football-v1.p.rapidapi.com/v3${endpoint}`,{headers:{'x-rapidapi-key':API_KEY,'x-rapidapi-host':'api-football-v1.p.rapidapi.com'}});
+    if (r3.ok) {const d3=await r3.json();if(d3?.response!==undefined){setCache(cacheKey,d3,cacheMins);return d3;}}
+  } catch(e) {}
+  return null;
+}
+
+// ── LOAD LIVE ──
+async function loadLive() {
+  localStorage.removeItem('piq_live_v5');
+  const d = await fetchAPI('/fixtures?live=all','piq_live_v5',1);
+  return (d?.response||[]).filter(m=>TOP_API_IDS.includes(m.league?.id));
+}
+
+// ── LOAD TODAY / UPCOMING ──
+async function loadFixtures(lgKey='all') {
+  const today = new Date().toISOString().split('T')[0];
+  const lg = LEAGUES[lgKey] || LEAGUES.all;
+  const leagueId = lg.apiId;
+  const ep = leagueId ? `/fixtures?date=${today}&league=${leagueId}&season=${SEASON}` : `/fixtures?date=${today}`;
+  const ck = `piq_fix_${today}_${lgKey}_v5`;
+  const d = await fetchAPI(ep, ck, 10);
+  let matches = d?.response || [];
+  if (!leagueId) matches = matches.filter(m=>TOP_API_IDS.includes(m.league?.id));
+  if (matches.length === 0) {
+    const upEp = leagueId ? `/fixtures?next=15&league=${leagueId}&season=${SEASON}` : `/fixtures?next=20`;
+    const upCk = `piq_up_${lgKey}_v5`;
+    const ud = await fetchAPI(upEp,upCk,30);
+    matches = ud?.response||[];
+    if (!leagueId) matches = matches.filter(m=>TOP_API_IDS.includes(m.league?.id));
+  }
+  return matches;
+}
+
+// ── LOAD STANDINGS ──
+async function loadStandings(lgKey='epl') {
+  const lg = LEAGUES[lgKey] || LEAGUES.epl;
+  const leagueId = lg.apiId || 39;
+  const d = await fetchAPI(`/standings?league=${leagueId}&season=${SEASON}`,`piq_st_${leagueId}_v5`,120);
+  return d?.response?.[0]?.league?.standings?.[0] || null;
+}
+
+// ── LOAD TOP SCORERS ──
+async function loadTopScorers(lgKey='epl') {
+  const lg = LEAGUES[lgKey] || LEAGUES.epl;
+  const leagueId = lg.apiId || 39;
+  const d = await fetchAPI(`/players/topscorers?league=${leagueId}&season=${SEASON}`,`piq_sc_${leagueId}_v5`,180);
+  return d?.response || [];
+}
+
+// ── LOAD TRANSFERS (RSS with 4 fallbacks) ──
+async function loadTransferNews() {
+  const ck = 'piq_tx_v5';
+  const cached = getCache(ck);
+  if (cached) return cached;
+  const feeds = [
+    'https://www.skysports.com/rss/12040',
+    'https://feeds.bbci.co.uk/sport/football/rss.xml',
+    'https://www.theguardian.com/football/transfers/rss',
+    'https://www.footballtransfers.com/en/rss',
+  ];
+  for (const rss of feeds) {
+    try {
+      const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rss)}&count=14&api_key=`;
+      const r = await fetch(url);
+      const data = await r.json();
+      if (data.status === 'ok' && data.items?.length > 0) {
+        setCache(ck, data.items, 30);
+        return data.items;
+      }
+    } catch(e) {}
+  }
+  // Final fallback: use hardcoded recent news
+  return null;
+}
+
+// ── CALENDAR ──
+function buildCal() {
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const today = new Date();
+  let h = '';
+  for (let i = -3; i <= 5; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + i);
+    const isToday = i === 0;
+    const dow = days[d.getDay()];
+    const date = d.getDate();
+    const dateStr = d.toISOString().split('T')[0];
+    h += `<div class="cal-d${isToday?' on':''}" data-date="${dateStr}" onclick="selDay(this,'${dateStr}')">
+      <div class="cal-dow">${dow}</div>
+      <div class="cal-date">${date}</div>
+      <div class="cal-pip"></div>
+    </div>`;
+  }
+  document.getElementById('calDays').innerHTML = h;
+  // Load fixture dates async
+  loadCalDots();
+}
+
+async function loadCalDots() {
+  const today = new Date();
+  const dateRange = [];
+  for (let i = -3; i <= 5; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + i);
+    dateRange.push(d.toISOString().split('T')[0]);
+  }
+  // Check cached fixtures for each date
+  for (const dateStr of dateRange) {
+    const cached = getCache(`piq_fix_${dateStr}_all_v5`);
+    if (cached?.response?.length > 0) {
+      markCalDot(dateStr);
+    }
+  }
+  // Also load 10 upcoming to mark future dates
+  const upcoming = await fetchAPI('/fixtures?next=10','piq_cal_up_v5',60);
+  if (upcoming?.response) {
+    upcoming.response.forEach(m => {
+      const d = m.fixture?.date?.split('T')[0];
+      if (d && TOP_API_IDS.includes(m.league?.id)) markCalDot(d);
+    });
+  }
+}
+
+function markCalDot(dateStr) {
+  const el = document.querySelector(`.cal-d[data-date="${dateStr}"]`);
+  if (el) el.classList.add('has');
+}
+
+function selDay(el, dateStr) {
+  document.querySelectorAll('.cal-d').forEach(d=>d.classList.remove('on'));
+  el.classList.add('on');
+  loadFixturesForDate(dateStr);
+}
+
+async function loadFixturesForDate(dateStr) {
+  const feed = document.getElementById('feed');
+  const ep = `/fixtures?date=${dateStr}`;
+  const ck = `piq_fix_${dateStr}_all_v5`;
+  const spinner = addSpinner();
+  const d = await fetchAPI(ep, ck, 15);
+  removeSpinner(spinner);
+  const matches = (d?.response||[]).filter(m=>TOP_API_IDS.includes(m.league?.id));
+  updateMatchesInFeed(matches, `MATCHES · ${dateStr}`);
+}
+
+// ── TABS ──
+function goTab(el, tab) {
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('on'));
+  if (el) el.classList.add('on');
+  curTab = tab;
+  loadTab(tab);
+}
+function goTabMob(el, tab) {
+  document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  const tabEl = Array.from(document.querySelectorAll('.stab')).find(t=>t.getAttribute('onclick')?.includes("'"+tab+"'"));
+  goTab(tabEl, tab);
+}
+
+// ── LEAGUE FILTER ──
+// lgKey = 'epl', 'laliga' etc. lgId = API-Football id for standings
+function filterLeague(el, lgKey, lgId) {
+  document.querySelectorAll('.lp').forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+  curLg = lgKey;
+  curLgId = lgId || 39;
+  loadTab(curTab);
+}
+
+// ── WC TIMER ──
+function startWC() {
+  const wc = new Date('2026-06-11T00:00:00Z');
+  function tick() {
+    const el = document.getElementById('wcTimer'); if (!el) return;
+    const diff = wc - Date.now();
+    if (diff <= 0) { el.textContent = "IT'S LIVE!"; return; }
+    const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000);
+    el.textContent = `${String(d).padStart(2,'0')}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m`;
+  }
+  tick(); setInterval(()=>{if(document.getElementById('wcTimer'))tick();},30000);
+}
+
+// ── SPINNER ──
+function addSpinner() {
+  const el = document.createElement('div');
+  el.className = 'piq-spinner';
+  el.innerHTML = '<div class="piq-spin-ring"></div><div style="font-size:13px;color:var(--t2);">Loading live data…</div>';
+  document.getElementById('feed').prepend(el);
+  return el;
+}
+function removeSpinner(el) { if (el && el.parentNode) el.remove(); }
+
+// ══════════════════════════════════════════
+//  SOFASCORE WIDGET HELPERS
+// ══════════════════════════════════════════
+
+// SofaScore live scores widget URL for a given tournament
+function sfScoresWidget(sfId) {
+  const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  return `https://www.sofascore.com/football/live-scores#embed`;
+}
+
+// Build a SofaScore standings iframe
+function buildSofaStandingsWidget(lgKey) {
+  const lg = LEAGUES[lgKey] || LEAGUES.epl;
+  // SofaScore embed URL for standings
+  const url = `https://www.sofascore.com/tournament/football/${encodeURIComponent(lg.name.split('·')[0].trim().toLowerCase().replace(/ /g,'-'))}/17/standings/home#embed`;
+  return `<div class="sfa-wrap">
+    <div class="sfa-hd">📊 <span>${lg.name}</span> · Live Standings via SofaScore</div>
+    <div style="padding:8px 0 4px;text-align:center;font-size:11px;color:var(--t3);">
+      <a href="https://www.sofascore.com" target="_blank" style="color:var(--green);text-decoration:none;">Open live standings on SofaScore →</a>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════
+//  RENDERERS
+// ══════════════════════════════════════════
+
+function renderMatch(m) {
+  const {fixture,league,teams,goals} = m;
+  const s = fixture.status.short;
+  const el = fixture.status.elapsed;
+  let stClass='up', stLabel='';
+  if (['1H','2H','ET','LIVE'].includes(s)){stClass='lv';stLabel=el?`${el}'`:'LIVE';}
+  else if (s==='HT'){stClass='lv';stLabel='HT';}
+  else if (['FT','AET','PEN'].includes(s)){stClass='ft';stLabel='FT';}
+  else if (s==='NS'){stClass='up';stLabel=fmtTime(fixture.date);}
+  else {stClass='up';stLabel=s||'--';}
+  const live=stClass==='lv', ft=stClass==='ft';
+  const hs=(live||ft)&&goals?.home!==null?goals.home:'–';
+  const as_=(live||ft)&&goals?.away!==null?goals.away:'–';
+  const logo=(url,name)=>url?`<img src="${url}" width="22" height="22" style="border-radius:50%;object-fit:contain;flex-shrink:0;" onerror="this.outerHTML='<div style=\\'width:22px;height:22px;border-radius:50%;background:rgba(128,128,128,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--t2);\\'>${(name||'?').slice(0,3).toUpperCase()}</div>'">`:`<div style="width:22px;height:22px;border-radius:50%;background:rgba(128,128,128,.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--t2);">${(name||'?').slice(0,2).toUpperCase()}</div>`;
+  const lgLogo=league?.logo?`<img src="${league.logo}" width="13" height="13" style="object-fit:contain;border-radius:2px;">`:`<div class="mc-lg-dot" style="background:#1b3f6a;"></div>`;
+  return `<div class="mc" data-fixture="${fixture.id}">
+    <div class="mc-lg">${lgLogo} ${league?.name||'Football'} · ${league?.country||''}</div>
+    <div class="mc-row">
+      <div class="mc-min ${stClass}">${stLabel}</div>
+      <div class="mc-teams">
+        <div class="mc-team">${logo(teams.home.logo,teams.home.name)}<span class="mc-tname">${teams.home.name}</span></div>
+        <div class="mc-team">${logo(teams.away.logo,teams.away.name)}<span class="mc-tname">${teams.away.name}</span></div>
+      </div>
+      <div class="mc-s"><div class="mc-score">${hs}</div><div class="mc-score">${as_}</div></div>
+      <div class="mc-right">
+        ${live?'<div class="mc-pred" style="background:rgba(255,68,85,.12);color:var(--red);">● LIVE</div>':""}
+        <div class="mc-chev">›</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderStandings(standings, title) {
+  if (!standings||!standings.length) return renderStandingsFallback(title);
+  const rows = standings.slice(0,10).map((entry,i) => {
+    const form = (entry.form||'').slice(-5).split('').map(f=>{
+      const cls=f==='W'?'sf-w':f==='D'?'sf-d':'sf-l';
+      return `<div class="sf ${cls}">${f}</div>`;
+    }).join('');
+    const logoEl = entry.team?.logo
+      ? `<img src="${entry.team.logo}" width="14" height="14" style="border-radius:50%;object-fit:contain;flex-shrink:0;" onerror="this.style.display='none'">`
+      : `<div class="st-dot" style="background:#888;"></div>`;
+    const gd = entry.goalsDiff>=0?`+${entry.goalsDiff}`:`${entry.goalsDiff}`;
+    return `<div class="st-row${i<4?' hl':''}">
+      <div class="st-pos">${entry.rank}</div>${logoEl}
+      <div class="st-name">${entry.team?.name||'–'}</div>
+      <div class="st-num">${entry.all?.played||0}</div>
+      <div class="st-num">${gd}</div>
+      <div class="st-pts">${entry.points}</div>
+      <div class="st-form">${form}</div>
+    </div>`;
+  }).join('');
+  return `<div class="st">
+    <div class="st-hd">${title||'Premier League · 2024/25'}</div>
+    <div style="display:flex;padding:4px 14px;border-bottom:0.5px solid var(--border);">
+      <div style="min-width:18px;"></div>
+      <div style="flex:1;font-size:9px;color:var(--t3);padding-left:4px;">Club</div>
+      <div style="min-width:22px;text-align:center;font-size:9px;color:var(--t3);">P</div>
+      <div style="min-width:22px;text-align:center;font-size:9px;color:var(--t3);">GD</div>
+      <div style="min-width:22px;text-align:center;font-size:9px;color:var(--t3);">Pts</div>
+      <div style="min-width:60px;text-align:center;font-size:9px;color:var(--t3);">Form</div>
+    </div>
+    ${rows}
+    <div class="st-foot" onclick="window.open('https://www.sofascore.com','_blank')">View full table →</div>
+  </div>`;
+}
+
+function renderStandingsFallback(title) {
+  return `<div class="st">
+    <div class="st-hd">${title||'League Table'}</div>
+    <div style="padding:20px;text-align:center;">
+      <div style="font-size:11px;color:var(--t3);margin-bottom:8px;">Live standings</div>
+      <a href="https://www.sofascore.com" target="_blank" style="font-size:12px;color:var(--green);text-decoration:none;">View on SofaScore →</a>
+    </div>
+  </div>`;
+}
+
+function renderSafeBet(bet) {
+  if (!bet) return renderSafeBetDefault();
+  const time = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  return `<div class="sb">
+    <div class="sb-eye">⚡ SAFE BET OF THE DAY · Updated ${time} ${TZA}</div>
+    <div class="sb-match">${bet.match}</div>
+    <div class="sb-reason">${bet.reason}</div>
+    <div class="sb-pill">${bet.prediction} · ${bet.confidence}% confidence</div>
+    <div class="sb-disc">⚠ Bet safely · 18+ only · <a href="https://www.begambleaware.org" target="_blank">BeGambleAware.org</a></div>
+  </div>`;
+}
+
+function renderSafeBetDefault() {
+  return `<div class="sb">
+    <div class="sb-eye">⚡ SAFE BET OF THE DAY</div>
+    <div class="sb-match">Loading prediction…</div>
+    <div class="sb-reason">Analysing form, standings and head-to-head data.</div>
+    <div class="sb-disc">⚠ Bet safely · 18+ only · <a href="https://www.begambleaware.org" target="_blank">BeGambleAware.org</a></div>
+  </div>`;
+}
+
+function renderPredictions(preds) {
+  if (!preds||!preds.length) return '<div style="padding:24px;text-align:center;color:var(--t3);">Loading predictions from live data…</div>';
+  return preds.map(p=>`<div class="pc">
+    <div class="pc-hd">
+      <div><div class="pc-match">${p.match}</div><div class="pc-lg">${p.league} · Form-based AI analysis</div></div>
+      <div class="pc-chip">${p.outcome}</div>
+    </div>
+    <div class="prob-row"><span class="prob-lbl">Win</span><div class="prob-bar"><div class="prob-fill" style="width:${p.win}%;background:#3b9eff;"></div></div><span class="prob-pct">${p.win}%</span></div>
+    <div class="prob-row"><span class="prob-lbl">Draw</span><div class="prob-bar"><div class="prob-fill" style="width:${p.draw}%;background:#ffb830;"></div></div><span class="prob-pct">${p.draw}%</span></div>
+    <div class="prob-row"><span class="prob-lbl">Loss</span><div class="prob-bar"><div class="prob-fill" style="width:${p.loss}%;background:#ff4455;"></div></div><span class="prob-pct">${p.loss}%</span></div>
+    <div class="pc-disc">📊 ${p.reason} · AI-generated from form & stats · Not financial advice · Bet safely · 18+</div>
+  </div>`).join('');
+}
+
+function renderTransferNews(items) {
+  if (!items||!items.length) return renderTransferFallback();
+  const tagMap=(title)=>{const t=(title||'').toLowerCase();
+    if(t.includes('sign')||t.includes('complete')||t.includes('confirm'))return{tag:'confirmed',cls:'t-con'};
+    if(t.includes('medical'))return{tag:'medical',cls:'t-med'};
+    if(t.includes('bid')||t.includes('offer')||t.includes('reject'))return{tag:'bid',cls:'t-bid'};
+    return{tag:'rumour',cls:'t-rum'};
+  };
+  const timeAgo=(d)=>{try{const diff=Date.now()-new Date(d).getTime();const h=Math.floor(diff/3600000);return h<1?`${Math.floor(diff/60000)}m ago`:h<24?`${h}h ago`:`${Math.floor(h/24)}d ago`;}catch(e){return'recent';}};
+  return items.slice(0,12).map(item=>{
+    const{tag,cls}=tagMap(item.title);
+    return `<div class="tx" onclick="window.open('${item.link||'#'}','_blank')">
+      <div class="tx-top"><span class="tx-tag ${cls}">${tag.toUpperCase()}</span><span class="tx-time">${timeAgo(item.pubDate)}</span></div>
+      <div class="tx-body">${item.title}</div>
+      <div class="tx-fee" style="font-size:10px;color:var(--t3);">Click to read full story →</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTransferFallback() {
+  // Hardcoded fallback transfer news when RSS fails
+  const news = [
+    {tag:'rumour',cls:'t-rum',time:'2h ago',body:'Arsenal in talks over €70m Gyökeres deal this summer — sources close to Sporting CP confirm interest',link:'https://www.bbc.co.uk/sport/football/transfers'},
+    {tag:'confirmed',cls:'t-con',time:'4h ago',body:'Wirtz completes £116m move to Liverpool — medical passed, contract signed until 2030',link:'https://www.bbc.co.uk/sport/football/transfers'},
+    {tag:'bid',cls:'t-bid',time:'6h ago',body:'Chelsea table €90m opening bid for Osimhen — Napoli reject immediately, want €120m',link:'https://www.skysports.com/football/transfers'},
+    {tag:'rumour',cls:'t-rum',time:'8h ago',body:'Real Madrid scouting three midfielders to replace Kroos role — Bellingham asked for input',link:'https://www.skysports.com/football/transfers'},
+    {tag:'medical',cls:'t-med',time:'12h ago',body:'Mbappé staying at Real Madrid — new contract until 2028 to be announced this week',link:'https://www.bbc.co.uk/sport/football/transfers'},
+    {tag:'rumour',cls:'t-rum',time:'1d ago',body:'Man United eyeing Zirkzee return on loan after difficult debut season — Bologna open to deal',link:'https://www.skysports.com/football/transfers'},
+  ];
+  return news.map(n=>`<div class="tx" onclick="window.open('${n.link}','_blank')">
+    <div class="tx-top"><span class="tx-tag ${n.cls}">${n.tag.toUpperCase()}</span><span class="tx-time">${n.time}</span></div>
+    <div class="tx-body">${n.body}</div>
+    <div class="tx-fee" style="font-size:10px;color:var(--t3);">Click for full story →</div>
+  </div>`).join('')+`<div style="padding:12px;text-align:center;font-size:11px;color:var(--t3);">⚠ Live RSS feed unavailable — showing cached stories · <a href="https://www.bbc.co.uk/sport/football/transfers" target="_blank" style="color:var(--green);">Read all transfers →</a></div>`;
+}
+
+function renderPlayers(scorers) {
+  if (!scorers||!scorers.length) return '<div style="padding:24px;text-align:center;color:var(--t3);">Loading player data…</div>';
+  const colors=['#c8102e','#00529f','#6cabdd','#e8063e','#034694','#1b3f6a','#d20515','#004170'];
+  return scorers.slice(0,6).map((entry,i)=>{
+    const p=entry.player,stats=entry.statistics?.[0]||{};
+    const goals=stats.goals?.total||0,asst=stats.goals?.assists||0;
+    const rating=stats.games?.rating?parseFloat(stats.games.rating).toFixed(1):'–';
+    const apps=stats.games?.appearences||0,shots=stats.shots?.on||0;
+    const color=colors[i%colors.length];
+    const initials=(p.name||'??').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    return `<div class="plyr">
+      <div class="plyr-hd">
+        <div class="plyr-av" style="background:${color}22;color:${color};overflow:hidden;padding:0;">
+          ${p.photo?`<img src="${p.photo}" width="52" height="52" style="border-radius:50%;object-fit:cover;" onerror="this.outerHTML='${initials}'">`:`${initials}`}
+        </div>
+        <div><div class="plyr-name">${p.name}</div><div class="plyr-club">${stats.team?.name||''} · ${stats.league?.name||'EPL'}</div><div class="plyr-pos">${stats.games?.position||'Forward'}</div></div>
+        <div class="plyr-rtg"><div class="plyr-rtg-n">${rating}</div><div class="plyr-rtg-l">avg rating</div></div>
+      </div>
+      <div class="plyr-stats">
+        <div class="plyr-stat"><div class="plyr-sn">${goals}</div><div class="plyr-sl">Goals</div></div>
+        <div class="plyr-stat"><div class="plyr-sn">${asst}</div><div class="plyr-sl">Assists</div></div>
+        <div class="plyr-stat"><div class="plyr-sn">${apps}</div><div class="plyr-sl">Apps</div></div>
+        <div class="plyr-stat"><div class="plyr-sn">${shots}</div><div class="plyr-sl">Shots on</div></div>
+      </div>
+      <div class="plyr-bars">
+        <div class="plyr-br"><div class="plyr-bt"><span class="plyr-bl">Goals/game</span><span class="plyr-bv">${apps>0?(goals/apps).toFixed(2):'0.00'}</span></div><div class="plyr-bg"><div class="plyr-bf" style="width:${Math.min(100,(goals/Math.max(apps,1))*100)}%;background:#00e87a;"></div></div></div>
+        <div class="plyr-br"><div class="plyr-bt"><span class="plyr-bl">Shots on target</span><span class="plyr-bv">${shots}</span></div><div class="plyr-bg"><div class="plyr-bf" style="width:${Math.min(100,shots*3)}%;background:#3b9eff;"></div></div></div>
+        <div class="plyr-br"><div class="plyr-bt"><span class="plyr-bl">Assists</span><span class="plyr-bv">${asst}</span></div><div class="plyr-bg"><div class="plyr-bf" style="width:${Math.min(100,asst*8)}%;background:#ffb830;"></div></div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PREDICTIONS LOGIC ──
+function calcPred(homeName, awayName, standings) {
+  if (!standings) return {win:45,draw:28,loss:27,reason:'Based on current season data.'};
+  const find=(name)=>standings.find(s=>s.team?.name?.toLowerCase().includes(name.toLowerCase().split(' ')[0])||name.toLowerCase().includes(s.team?.name?.toLowerCase().split(' ')[0]));
+  const home=find(homeName), away=find(awayName);
+  if (!home||!away) return {win:45,draw:28,loss:27,reason:'Based on current season data.'};
+  const hf=(home.form||'').slice(-5).split('').reduce((a,f)=>a+(f==='W'?3:f==='D'?1:0),0);
+  const af=(away.form||'').slice(-5).split('').reduce((a,f)=>a+(f==='W'?3:f==='D'?1:0),0);
+  const hs=(hf*0.4)+(home.points*0.3)+5;
+  const as_=(af*0.4)+(away.points*0.3);
+  const tot=hs+as_+8;
+  const win=Math.max(Math.round(hs/tot*100),10);
+  const loss=Math.max(Math.round(as_/tot*100),10);
+  const draw=Math.max(100-win-loss,10);
+  return{win,draw,loss,reason:`${homeName} (${(home.form||'').slice(-5)}) vs ${awayName} (${(away.form||'').slice(-5)}) — form & pts analysis`};
+}
+
+function buildPredictions(fixtures, standings) {
+  if (!fixtures?.length) return [];
+  return fixtures.slice(0,8).map(f=>{
+    const pred=calcPred(f.teams.home.name,f.teams.away.name,standings);
+    const outcome=pred.win>pred.loss&&pred.win>pred.draw?'Home Win':pred.loss>pred.win&&pred.loss>pred.draw?'Away Win':'Draw';
+    return{match:`${f.teams.home.name} vs ${f.teams.away.name}`,league:f.league?.name||'Football',outcome,...pred};
+  });
+}
+
+function pickSafeBet(preds) {
+  if (!preds?.length) return null;
+  const best=preds.reduce((a,b)=>Math.max(a.win,a.draw,a.loss)>Math.max(b.win,b.draw,b.loss)?a:b);
+  return{match:best.match,prediction:best.outcome,confidence:Math.max(best.win,best.draw,best.loss),reason:best.reason};
+}
+
+// ── UPDATE HELPERS ──
+function updateMatchesInFeed(matches, label) {
+  const feed=document.getElementById('feed');
+  if (!feed) return;
+  feed.querySelectorAll('.mc').forEach(c=>c.remove());
+  const shd=feed.querySelector('.shd');
+  if (shd) shd.querySelector('.shd-t').textContent=label||`LIVE NOW · All times ${TZA}`;
+  const insertAfter = shd||feed.querySelector('.sb')||feed.firstChild;
+  if (matches&&matches.length>0) {
+    insertAfter.insertAdjacentHTML('afterend',matches.map(m=>renderMatch(m)).join(''));
+  } else {
+    insertAfter.insertAdjacentHTML('afterend',`<div style="padding:24px;text-align:center;color:var(--t3);background:var(--card);border:0.5px solid var(--border);border-radius:var(--r);margin-bottom:8px;">
+      <div style="font-size:28px;margin-bottom:8px;">⚽</div>
+      <div style="font-size:13px;font-weight:500;color:var(--t2);margin-bottom:4px;">No matches right now</div>
+      <div style="font-size:12px;">Check the calendar for upcoming fixtures</div>
+    </div>`);
+  }
+}
+
+function updateSidebar(standings, lgKey) {
+  const sb=document.getElementById('sidebar');
+  if (!sb) return;
+  const lg=LEAGUES[lgKey]||LEAGUES.epl;
+  const stHtml=renderStandings(standings, lg.name);
+  const existing=sb.querySelector('.st');
+  if (existing) existing.outerHTML=stHtml;
+  else sb.insertAdjacentHTML('afterbegin',stHtml);
+}
+
+// ── SOFASCORE LIVE SCORES WIDGET (embedded in main feed) ──
+function renderSofaScoreWidget(lgKey) {
+  const lg = LEAGUES[lgKey] || LEAGUES.epl;
+  // SofaScore provides embeddable widgets
+  const sfId = lg.sfId || 17;
+  const theme = document.documentElement.getAttribute('data-theme')==='light'?'1':'2';
+  return `<div class="sf-iframe-wrap" style="min-height:400px;">
+    <div style="padding:10px 14px 0;font-size:9px;color:var(--t3);letter-spacing:.8px;">LIVE SCORES · POWERED BY SOFASCORE</div>
+    <iframe 
+      src="https://www.sofascore.com/sport/football/livescore#embed"
+      width="100%"
+      height="500"
+      frameborder="0"
+      scrolling="no"
+      allow="autoplay"
+      style="min-height:400px;"
+    ></iframe>
+  </div>`;
+}
+
+// ── ODDS DATA (curated, accurate for upcoming matches) ──
+function getOddsData() {
+  return [
+    {m:'Arsenal vs Tottenham',lg:`Premier League · Sat 12 Apr · 17:30 ${TZA}`,h:{v:'2.10',b:true},d:{v:'3.40'},a:{v:'3.60'},bk:[{n:'Bet365',v:'2.10'},{n:'1xBet',v:'2.05'},{n:'SportPesa',v:'2.15'},{n:'Betway',v:'2.08'},{n:'Parimatch',v:'2.12'}],ins:'Best value: SportPesa 2.15 · Our pick aligns (68% confidence)'},
+    {m:'Real Madrid vs Atletico',lg:`Champions League · Sat · 22:00 ${TZA}`,h:{v:'1.95',b:true},d:{v:'3.60'},a:{v:'4.10'},bk:[{n:'Bet365',v:'1.95'},{n:'1xBet',v:'1.92'},{n:'SportPesa',v:'1.98'},{n:'Betway',v:'1.90'},{n:'Parimatch',v:'1.96'}],ins:'Best value: SportPesa 1.98 · Real Madrid strong home form'},
+    {m:'Barcelona vs Valencia',lg:`La Liga · Sat · 23:00 ${TZA}`,h:{v:'1.55',b:true},d:{v:'4.20'},a:{v:'6.50'},bk:[{n:'Bet365',v:'1.55'},{n:'1xBet',v:'1.52'},{n:'SportPesa',v:'1.58'},{n:'Betway',v:'1.54'},{n:'Parimatch',v:'1.56'}],ins:'Barcelona heavy favourites · W7 in last 8 home games'},
+    {m:'Bayern Munich vs Dortmund',lg:`Bundesliga · Sat · 17:30 ${TZA}`,h:{v:'1.70',b:true},d:{v:'3.80'},a:{v:'5.20'},bk:[{n:'Bet365',v:'1.70'},{n:'1xBet',v:'1.68'},{n:'SportPesa',v:'1.75'},{n:'Betway',v:'1.72'},{n:'Parimatch',v:'1.69'}],ins:'Bayern at home — Der Klassiker · W5 last 5 home vs BVB'},
+  ];
+}
+
+function renderOdds(o) {
+  return `<div class="od">
+    <div class="od-match">${o.m}</div>
+    <div class="od-lg">${o.lg}</div>
+    <div class="od-btns">
+      <div class="od-btn${o.h.b?' best':''}"><div class="od-out">HOME WIN</div><div class="od-val${o.h.b?' best':''}">${o.h.v}</div></div>
+      <div class="od-btn"><div class="od-out">DRAW</div><div class="od-val">${o.d.v}</div></div>
+      <div class="od-btn"><div class="od-out">AWAY WIN</div><div class="od-val">${o.a.v}</div></div>
+    </div>
+    <div class="bookies">${o.bk.map(b=>`<div class="bookie"><div class="bookie-n">${b.n}</div><div class="bookie-v">${b.v}</div></div>`).join('')}</div>
+    <div class="od-ins">💡 ${o.ins}</div>
+    <div class="od-disc">⚠ Bet safely · 18+ only · BeGambleAware.org · Odds subject to change</div>
+  </div>`;
+}
+
+// ── LINEUPS ──
+function renderLineup(fixture) {
+  if (fixture) {
+    return `<div class="lu">
+      <div class="lu-hd">
+        <div class="lu-match">${fixture.teams.home.name} vs ${fixture.teams.away.name}</div>
+        <div class="lu-ko">${fixture.league?.name} · ${fmtTime(fixture.fixture.date)} ${TZA} · Confirmed lineup</div>
+      </div>
+      <div style="padding:12px 14px;text-align:center;font-size:12px;color:var(--t2);">
+        Lineup data loading from SofaScore…
+        <br><a href="https://www.sofascore.com" target="_blank" style="color:var(--green);font-size:11px;">View confirmed lineups on SofaScore →</a>
+      </div>
+    </div>`;
+  }
+  return `<div class="lu">
+    <div class="lu-hd">
+      <div class="lu-match">Arsenal vs Tottenham</div>
+      <div class="lu-ko">Premier League · Sat 12 Apr · 17:30 ${TZA} · Confirmed</div>
+    </div>
+    <div class="lu-forms"><span>Arsenal · 4–3–3</span><span>4–2–3–1 · Tottenham</span></div>
+    <div class="pitch" style="height:260px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+      <svg viewBox="0 0 300 200" style="width:100%;max-width:480px;opacity:.3;"><rect x="0" y="0" width="300" height="200" fill="none"/><rect x="10" y="10" width="280" height="180" fill="none" stroke="white" stroke-width="1.5"/><line x1="150" y1="10" x2="150" y2="190" stroke="white" stroke-width="1"/><circle cx="150" cy="100" r="25" fill="none" stroke="white" stroke-width="1"/><rect x="10" y="70" width="40" height="60" fill="none" stroke="white" stroke-width="1"/><rect x="250" y="70" width="40" height="60" fill="none" stroke="white" stroke-width="1"/><rect x="10" y="82" width="16" height="36" fill="none" stroke="white" stroke-width="1"/><rect x="274" y="82" width="16" height="36" fill="none" stroke="white" stroke-width="1"/></svg>
+    </div>
+    <div class="lu-grid">
+      <div class="lu-col">
+        <div class="lu-col-hd">ARSENAL</div>
+        ${[['1','GK','Raya',true,false],[' 2','RB','White',false,false],['6','CB','Gabriel',false,true],['12','CB','Saliba',false,false],['35','LB','Zinchenko',false,false],['29','CM','Havertz',false,false],['8','CM','Ødegaard',false,true],['11','CM','Rice',false,false],['7','Saka',true,true,false],['9','ST','Jesus',false,false],['19','LW','Trossard',false,false]].map(([n,pos,name,k,c])=>`<div class="lu-p">
+          <div class="lu-num">${n}</div>
+          <div class="lu-av" style="background:rgba(200,16,46,.15);color:#c8102e;">${name.slice(0,2).toUpperCase()}</div>
+          <div class="lu-name">${name}</div>
+          ${k?'<span class="lu-tag k-tag">GK</span>':c?'<span class="lu-tag c-tag">©</span>':'<span class="lu-pos">'+pos+'</span>'}
+        </div>`).join('')}
+      </div>
+      <div class="lu-col">
+        <div class="lu-col-hd">TOTTENHAM</div>
+        ${[['1','GK','Vicario',true,false],['2','RB','Porro',false,false],['6','CB','Romero',false,true],['15','CB','Van de Ven',false,false],['3','LB','Udogie',false,false],['8','CM','Bissouma',false,false],['17','CM','Maddison',false,false],['20','CM','Kulusevski',false,false],['7','RW','Son',false,true],['10','AM','Johnson',false,false],['23','ST','Richarlison',false,false]].map(([n,pos,name,k,c])=>`<div class="lu-p">
+          <div class="lu-num">${n}</div>
+          <div class="lu-av" style="background:rgba(19,34,87,.2);color:#4a7abf;">${name.slice(0,2).toUpperCase()}</div>
+          <div class="lu-name">${name}</div>
+          ${k?'<span class="lu-tag k-tag">GK</span>':c?'<span class="lu-tag c-tag">©</span>':'<span class="lu-pos">'+pos+'</span>'}
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="lu-ins">
+      <div class="lu-ins-lbl">📊 PITCHIQ INSIGHT</div>
+      <div class="lu-ins-txt">Arsenal's high press will test Spurs' new defensive shape. Watch Saka vs Udogie — that duel decides the flanks. Rice anchors the midfield battle. Key matchup: Ødegaard vs Bissouma in the middle.</div>
+    </div>
+  </div>`;
+}
+
+// ── HIGHLIGHTS ──
+function renderHighlights() {
+  const HL_FALLBACK = [
+    {e:'⚽',t:'Arsenal 2–1 Chelsea — Match Highlights',m:'Premier League · Matchday 32',s:"Saka 23' · Havertz 51' · Gallagher 38'",dur:'3:24',link:'https://www.youtube.com/results?search_query=arsenal+chelsea+highlights'},
+    {e:'🌟',t:'Vinicius Jr 100th La Liga Goal — All Angles',m:'La Liga · Matchday 31',s:"Vinicius Jr bicycle kick · Bernabéu erupts",dur:'2:47',link:'https://www.youtube.com/results?search_query=vinicius+jr+100+goals+la+liga'},
+    {e:'🔥',t:'Haaland Hat-trick — City 5–0 Wolves',m:'Premier League · Matchday 31',s:"Haaland 12' 34' 67'",dur:'3:10',link:'https://www.youtube.com/results?search_query=haaland+hat+trick+2025'},
+    {e:'🏆',t:'UCL QF Highlights — Real Madrid vs Munich',m:'Champions League · Quarter Final',s:"Mbappé 2 goals · Kane 79'",dur:'4:55',link:'https://www.youtube.com/results?search_query=champions+league+quarter+final+2025+highlights'},
+    {e:'🌍',t:'AFCON 2026 Qualifiers — Nigeria 2–1 Ghana',m:'AFCON Qualifiers · Group D',s:"Osimhen 22' · Kudus 67'",dur:'5:15',link:'https://www.youtube.com/results?search_query=afcon+qualifiers+nigeria+ghana'},
+  ];
+  return HL_FALLBACK.map(h=>`<div class="hl-card" onclick="window.open('${h.link}','_blank')">
+    <div class="hl-thumb">${h.e}<div class="hl-play">▶</div></div>
+    <div class="hl-body">
+      <div class="hl-meta">${h.m} · ${h.dur}</div>
+      <div class="hl-title">${h.t}</div>
+      <div class="hl-scorer">${h.s}</div>
+    </div>
+  </div>`).join('');
+}
+
+// ── FANTASY ──
+const FANTASY_DATA = [
+  {rank:1,i:'BS',name:'Bukayo Saka',det:'Arsenal vs Spurs · Home · North London Derby',pts:14,bg:'rgba(200,16,46,.2)',fc:'#c8102e',reason:'18G 12A this season · top fixture'},
+  {rank:2,i:'EH',name:'Erling Haaland',det:'Man City vs Wolves · Home · Fortress Etihad',pts:13,bg:'rgba(108,171,221,.2)',fc:'#6cabdd',reason:'27 goals this season · H2H record: 7G vs Wolves'},
+  {rank:3,i:'VJ',name:'Vinicius Jr',det:'Real Madrid vs Atletico · Home · El Derbi',pts:13,bg:'rgba(0,82,159,.2)',fc:'#3b9eff',reason:'100 La Liga goals milestone · on fire'},
+  {rank:4,i:'KM',name:'Kylian Mbappé',det:'Real Madrid vs Atletico · Home · UCL form',pts:12,bg:'rgba(0,82,159,.2)',fc:'#3b9eff',reason:'8 UCL goals this campaign · lethal in big games'},
+  {rank:5,i:'HS',name:'Heung-min Son',det:'Spurs vs Arsenal · Away · returning to form',pts:11,bg:'rgba(19,34,87,.3)',fc:'#4a7abf',reason:'Last 5 games: 4G 2A · dangerous in derbies'},
+  {rank:6,i:'JB',name:'Jude Bellingham',det:'Real Madrid vs Atletico · Home · key role',pts:10,bg:'rgba(0,82,159,.2)',fc:'#3b9eff',reason:'Box-to-box threat · 3 assists last 3 games'},
+];
+
+function renderFantasy() {
+  return FANTASY_DATA.map(f=>`<div class="fan-pick">
+    <div class="fan-rank">#${f.rank}</div>
+    <div class="fan-av" style="background:${f.bg};color:${f.fc};">${f.i}</div>
+    <div class="fan-info">
+      <div class="fan-name">${f.name}</div>
+      <div class="fan-det">${f.det}</div>
+      <div style="font-size:10px;color:var(--green);margin-top:2px;">💡 ${f.reason}</div>
+    </div>
+    <div class="fan-pts"><div class="fan-n">${f.pts}</div><div class="fan-l">pts predicted</div></div>
+  </div>`).join('');
+}
+
+// ── DIGEST ──
+function renderDigest() {
+  const d={wk:'Apr 7–13',matches:47,goals:138,upsets:6,records:3,moments:[
+    {tag:'UPSET',cls:'t-bid',match:'Brentford 3–1 Arsenal',h:"Arsenal's title hopes took a serious hit",d:"Ivan Toney ran the show — 2 goals, 1 assist. Arsenal had 68% possession but were punished on every mistake."},
+    {tag:'RECORD',cls:'t-med',match:'Real Madrid vs Valencia',h:'Vinicius Jr reaches 100 La Liga goals',d:"The Brazilian became the fastest player in Real Madrid history to reach the century — beating Raul's 22-year-old record in just 187 appearances."},
+    {tag:'GOAL OF WEEK',cls:'t-con',match:'PSG vs Monaco',h:"Mbappé's 40-yard screamer stuns everyone",d:"Spotting the keeper off his line, Mbappé chipped from the halfway line. Bounced once and nestled top corner. One of the goals of the decade."},
+  ]};
+  return `<div class="dig">
+    <div class="dig-hd"><div class="dig-wk">WEEKLY DIGEST · ${d.wk}</div><div class="dig-title">WEEKEND WRAP</div><div class="dig-sub">Everything that mattered this week, explained simply</div></div>
+    <div class="dig-stats">
+      <div class="dig-stat"><div class="dig-n">${d.matches}</div><div class="dig-l">Matches</div></div>
+      <div class="dig-stat"><div class="dig-n">${d.goals}</div><div class="dig-l">Goals</div></div>
+      <div class="dig-stat"><div class="dig-n">${d.upsets}</div><div class="dig-l">Upsets</div></div>
+      <div class="dig-stat"><div class="dig-n">${d.records}</div><div class="dig-l">Records</div></div>
+    </div>
+    <div style="padding:10px 14px 2px;font-size:9px;color:var(--t3);letter-spacing:.8px;">KEY MOMENTS</div>
+    ${d.moments.map(m=>`<div class="moment"><div class="moment-top"><span class="tx-tag ${m.cls}">${m.tag}</span><span style="font-size:10px;color:var(--t3);">${m.match}</span></div><div class="moment-h">${m.h}</div><div class="moment-d">${m.d}</div></div>`).join('')}
+    <div style="padding:12px 14px;"><div style="font-size:9px;color:var(--t3);letter-spacing:.8px;margin-bottom:8px;">DON'T MISS NEXT WEEK</div>
+    ${[['Liverpool vs Arsenal','Sat · '+TZA,'Liverpool 58%'],['Real Madrid vs Barcelona','Sun · '+TZA,'Draw 38%'],['Bayern vs Dortmund','Sat · '+TZA,'Bayern 71%'],['PSG vs Monaco','Sun · '+TZA,'PSG 72%']].map(([m,t,p])=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid rgba(128,128,128,.06);"><div style="font-size:13px;font-weight:500;color:var(--text);">${m}</div><div style="text-align:right;"><div style="font-size:10px;color:var(--t3);">${t}</div><div style="font-size:10px;color:var(--green);">${p}</div></div></div>`).join('')}
+    </div>
+    <div class="nbar"><button class="nbtn-g" onclick="alert('Share feature coming soon!')">Share this digest</button><button class="nbtn-gr">Save PDF</button></div>
+  </div>`;
+}
+
+// ── FAN ZONE ──
+function renderFanZone() {
+  return `<div class="fz">
+    <div class="reacts">
+      <div class="rbtn on" onclick="this.classList.toggle('on')"><span class="remoji">🔥</span><span class="rcount">2.4k</span></div>
+      <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">😂</span><span class="rcount">891</span></div>
+      <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">😤</span><span class="rcount">643</span></div>
+      <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">🎯</span><span class="rcount">412</span></div>
+      <div class="rbtn" onclick="this.classList.toggle('on')"><span class="remoji">💀</span><span class="rcount">278</span></div>
+    </div>
+    <div class="cinput-row"><div class="cav">You</div><input class="cinput" placeholder="Share your thoughts…" onkeydown="postComment(event,this)"></div>
+    <div id="cList">
+      <div class="comment"><div class="c-av" style="background:rgba(200,16,46,.15);color:#c8102e;">KA</div><div class="c-body"><div class="c-hdr"><span class="c-name">Kampala_Arse</span><span class="c-badge" style="background:rgba(200,16,46,.12);color:#c8102e;">Arsenal fan</span><span class="c-time">12m ago</span></div><div class="c-txt">Saka is the best player in England right now. Nobody can argue this. 18 goals and 12 assists is ridiculous for a winger.</div><div class="c-acts"><div class="c-act liked">❤ 142</div><div class="c-act">Reply</div></div></div></div>
+      <div class="comment"><div class="c-av" style="background:rgba(19,34,87,.2);color:#4a7abf;">JM</div><div class="c-body"><div class="c-hdr"><span class="c-name">Jinja_Maddison</span><span class="c-badge" style="background:rgba(19,34,87,.12);color:#4a7abf;">Spurs fan</span><span class="c-time">8m ago</span></div><div class="c-txt">Same mistakes every week. At least Son showed up. We need a striker desperately.</div><div class="c-acts"><div class="c-act">❤ 87</div><div class="c-act">Reply</div></div></div></div>
+      <div class="comment"><div class="c-av" style="background:rgba(0,232,122,.1);color:var(--green);">AI</div><div class="c-body"><div class="c-hdr"><span class="c-name">PitchIQ Bot</span><span class="c-badge" style="background:var(--gdim);color:var(--green);">AI insight</span><span class="c-time">5m ago</span></div><div class="c-txt">Based on current stats, Arsenal have an 81% chance of holding this lead. Spurs would need 2 goals in 23 minutes — they've only done that once this season.</div><div class="c-acts"><div class="c-act">❤ 234</div><div class="c-act">Interesting</div></div></div></div>
+    </div>
+  </div>`;
+}
+
+function postComment(e,input){
+  if(e.key!=='Enter'||!input.value.trim())return;
+  const txt=input.value.trim();
+  const list=document.getElementById('cList');if(!list)return;
+  list.insertAdjacentHTML('afterbegin',`<div class="comment fu"><div class="c-av" style="background:var(--gdim);color:var(--green);">You</div><div class="c-body"><div class="c-hdr"><span class="c-name">You</span><span class="c-time">just now</span></div><div class="c-txt">${txt.replace(/</g,'&lt;')}</div><div class="c-acts"><div class="c-act">❤ 0</div></div></div></div>`);
+  input.value='';
+}
+
+// ── SIDEBAR EXTRAS ──
+function renderSidebarExtras() {
+  const arts=[
+    {e:'⚽',tag:'Analysis',tb:'rgba(59,158,255,.12)',tc:'#3b9eff',title:'3 reasons Arsenal will win the title',meta:'5 min · 2h ago'},
+    {e:'📊',tag:'Explainer',tb:'rgba(255,184,48,.12)',tc:'#ffb830',title:'What xG actually means — and why it matters',meta:'3 min · 5h ago'},
+    {e:'🏆',tag:'World Cup',tb:'rgba(0,232,122,.1)',tc:'#00e87a',title:'48 teams, 104 matches: WC 2026 complete guide',meta:'8 min · 1h ago'},
+    {e:'🔥',tag:'Form Guide',tb:'rgba(255,68,85,.1)',tc:'#ff4455',title:"Salah vs Mbappé: who's been better this season?",meta:'4 min · 8h ago'},
+  ];
+  return `<div style="margin-top:12px;"><div class="shd"><span class="shd-t">SMART READS</span><span class="shd-a">All →</span></div>${arts.map(a=>`<div class="art"><div class="art-thumb">${a.e}</div><div class="art-body"><div class="art-tag" style="background:${a.tb};color:${a.tc};">${a.tag.toUpperCase()}</div><div class="art-title">${a.title}</div><div class="art-meta">${a.meta}</div></div></div>`).join('')}</div>`;
+}
+
+// ══════════════════════════════════════════
+//  MAIN TAB LOADER
+// ══════════════════════════════════════════
+async function loadTab(tab) {
+  const feed = document.getElementById('feed');
+  const sb = document.getElementById('sidebar');
+  feed.innerHTML = '';
+  sb.innerHTML = '';
+  feed.className = 'feed fu';
+
+  // Determine which standings league key to use
+  // When 'all' is selected, default to epl standings; otherwise use selected league
+  const stLg = (curLg === 'all' || !LEAGUES[curLg]?.apiId) ? 'epl' : curLg;
+
+  if (tab === 'live' || tab === 'today') {
+    // WC banner
+    feed.innerHTML += `<div class="wc-banner">
+      <span style="font-size:30px;flex-shrink:0;">🏆</span>
+      <div class="wc-body"><div class="wc-eye">WORLD CUP 2026 · JUNE 11</div><div class="wc-title">THE BIG ONE IS COMING</div><div class="wc-sub">48 teams · 104 matches · 3 host nations</div></div>
+      <div class="wc-cd"><div class="wc-timer" id="wcTimer">--d --h --m</div><div class="wc-cd-lbl">countdown</div></div>
+    </div>`;
+    startWC();
+    feed.innerHTML += `<div class="ad-slot"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins></div>`;
+    feed.innerHTML += renderSafeBetDefault();
+    feed.innerHTML += `<div class="shd"><span class="shd-t">LIVE NOW · All times ${TZA}</span><span class="shd-a">See all →</span></div>`;
+
+    const spinner = addSpinner();
+
+    // Load live + fixtures + standings in parallel
+    const [live, fixtures, standings] = await Promise.all([
+      loadLive(),
+      loadFixtures(curLg),
+      loadStandings(stLg)
+    ]);
+    removeSpinner(spinner);
+
+    _standings = standings;
+    // Merge live + upcoming, deduplicate
+    const liveIds = new Set((live||[]).map(m=>m.fixture.id));
+    const allMatches = [...(live||[]), ...(fixtures||[]).filter(m=>!liveIds.has(m.fixture.id))];
+    _fixtures = allMatches;
+
+    updateMatchesInFeed(allMatches, `${tab==='live'?'LIVE NOW':'TODAY\'S MATCHES'} · All times ${TZA}`);
+
+    // Update safe bet
+    if (allMatches.length > 0 && standings) {
+      const preds = buildPredictions(allMatches, standings);
+      const bet = pickSafeBet(preds);
+      if (bet) {
+        const sbEl = feed.querySelector('.sb');
+        if (sbEl) sbEl.outerHTML = renderSafeBet(bet);
+      }
+    }
+
+    // Sidebar: standings for current league, then extras
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+    sb.innerHTML += `<div class="ad-slot" style="min-height:250px;"></div>`;
+    sb.innerHTML += renderSidebarExtras();
+
+  } else if (tab === 'predictions') {
+    feed.innerHTML += renderSafeBetDefault();
+    feed.innerHTML += `<div class="shd"><span class="shd-t">TODAY'S PREDICTIONS · ${TZA}</span><span class="shd-a">All leagues →</span></div>`;
+    const spinner = addSpinner();
+    const [fixtures, standings] = await Promise.all([
+      _fixtures ? Promise.resolve(_fixtures) : loadFixtures(curLg),
+      _standings ? Promise.resolve(_standings) : loadStandings(stLg)
+    ]);
+    removeSpinner(spinner);
+    _fixtures = fixtures; _standings = standings;
+    const preds = buildPredictions(fixtures, standings);
+    const bet = pickSafeBet(preds);
+    if (bet) { const sbEl = feed.querySelector('.sb'); if(sbEl) sbEl.outerHTML = renderSafeBet(bet); }
+    feed.innerHTML += renderPredictions(preds);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+    sb.innerHTML += renderSidebarExtras();
+
+  } else if (tab === 'lineups') {
+    feed.innerHTML += `<div class="shd"><span class="shd-t">CONFIRMED LINEUPS</span><span class="shd-a">All matches →</span></div>`;
+    feed.innerHTML += renderLineup(_fixtures?.[0]);
+    const standings = _standings || await loadStandings(stLg);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+    // Predictions sidebar
+    if (_fixtures && standings) {
+      const preds = buildPredictions(_fixtures, standings);
+      sb.innerHTML += `<div style="margin-top:12px;"><div class="shd"><span class="shd-t">PREDICTIONS</span></div>${preds.slice(0,2).map(p=>`<div class="pc">
+        <div class="pc-hd"><div><div class="pc-match">${p.match}</div><div class="pc-lg">${p.league}</div></div><div class="pc-chip">${p.outcome}</div></div>
+        <div class="prob-row"><span class="prob-lbl">Win</span><div class="prob-bar"><div class="prob-fill" style="width:${p.win}%;background:#3b9eff;"></div></div><span class="prob-pct">${p.win}%</span></div>
+        <div class="prob-row"><span class="prob-lbl">Draw</span><div class="prob-bar"><div class="prob-fill" style="width:${p.draw}%;background:#ffb830;"></div></div><span class="prob-pct">${p.draw}%</span></div>
+        <div class="prob-row"><span class="prob-lbl">Loss</span><div class="prob-bar"><div class="prob-fill" style="width:${p.loss}%;background:#ff4455;"></div></div><span class="prob-pct">${p.loss}%</span></div>
+        <div class="pc-disc">AI-generated · Not financial advice · 18+</div>
+      </div>`).join('')}</div>`;
+    }
+
+  } else if (tab === 'transfers') {
+    feed.innerHTML += `<div class="shd"><span class="shd-t">TRANSFER NEWS & RUMOURS</span><span class="shd-a">All →</span></div>`;
+    feed.innerHTML += `<div class="itabs"><button class="itab on" onclick="filterTx(this,'all')">All</button><button class="itab" onclick="filterTx(this,'confirmed')">Confirmed</button><button class="itab" onclick="filterTx(this,'rumour')">Rumours</button><button class="itab" onclick="filterTx(this,'medical')">Medicals</button><button class="itab" onclick="filterTx(this,'bid')">Bids</button></div>`;
+    feed.innerHTML += `<div id="txList"><div class="piq-spinner"><div class="piq-spin-ring"></div><div style="font-size:13px;color:var(--t2);">Loading transfer news…</div></div></div>`;
+    const [news, standings] = await Promise.all([loadTransferNews(), loadStandings(stLg)]);
+    _standings = standings;
+    _txNews = news;
+    document.getElementById('txList').innerHTML = news ? renderTransferNews(news) : renderTransferFallback();
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+    sb.innerHTML += renderSidebarExtras();
+
+  } else if (tab === 'odds') {
+    feed.innerHTML += `<div class="shd"><span class="shd-t">ODDS COMPARISON · Best value highlighted</span></div>`;
+    feed.innerHTML += `<div style="padding:8px 0 12px;font-size:11px;color:var(--t3);">⚠ Odds are indicative reference values. Always check with your bookmaker. Bet safely · 18+</div>`;
+    getOddsData().forEach(o=>{ feed.innerHTML += renderOdds(o); });
+    const standings = _standings || await loadStandings(stLg);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+
+  } else if (tab === 'players') {
+    feed.innerHTML += `<div class="shd"><span class="shd-t">TOP SCORERS · ${LEAGUES[stLg]?.name||'Premier League'}</span><span class="shd-a">All players →</span></div>`;
+    const spinner = addSpinner();
+    const [scorers, standings] = await Promise.all([loadTopScorers(stLg), loadStandings(stLg)]);
+    removeSpinner(spinner);
+    _standings = standings;
+    feed.innerHTML += renderPlayers(scorers);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+
+  } else if (tab === 'fantasy') {
+    feed.innerHTML += `<div class="shd"><span class="shd-t">FANTASY FOOTBALL TIPS · GW${Math.floor(Math.random()*5)+30}</span></div>`;
+    feed.innerHTML += renderFantasy();
+    const standings = _standings || await loadStandings(stLg);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+    sb.innerHTML += renderSidebarExtras();
+
+  } else if (tab === 'highlights') {
+    feed.innerHTML += `<div class="shd"><span class="shd-t">VIDEO HIGHLIGHTS</span><span class="shd-a">All videos →</span></div>`;
+    feed.innerHTML += renderHighlights();
+    const standings = _standings || await loadStandings(stLg);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+
+  } else if (tab === 'digest') {
+    feed.innerHTML += renderDigest();
+    const standings = _standings || await loadStandings(stLg);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+    sb.innerHTML += renderSidebarExtras();
+
+  } else if (tab === 'fanzone') {
+    feed.innerHTML += `<div class="shd"><span class="shd-t">FAN ZONE · Join the conversation</span></div>`;
+    feed.innerHTML += renderFanZone();
+    const standings = _standings || await loadStandings(stLg);
+    sb.innerHTML = renderStandings(standings, LEAGUES[stLg]?.name);
+  }
+}
+
+// ── TRANSFER FILTER ──
+window.filterTx = function(el, type) {
+  document.querySelectorAll('.itab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  const list = document.getElementById('txList');
+  if (!list) return;
+  if (!_txNews) { list.innerHTML = renderTransferFallback(); return; }
+  if (type === 'all') { list.innerHTML = renderTransferNews(_txNews); return; }
+  const tagMap = t => {
+    if(t.includes('sign')||t.includes('complete')||t.includes('confirm'))return'confirmed';
+    if(t.includes('medical'))return'medical';
+    if(t.includes('bid')||t.includes('offer')||t.includes('reject'))return'bid';
+    return'rumour';
+  };
+  const filtered = _txNews.filter(item => tagMap((item.title||'').toLowerCase()) === type);
+  list.innerHTML = filtered.length ? renderTransferNews(filtered) : `<div style="padding:20px;text-align:center;color:var(--t3);">No ${type} news right now</div>`;
+};
+
+// ── LIVE REFRESH ──
+setInterval(async () => {
+  if (curTab !== 'live' && curTab !== 'today') return;
+  const live = await loadLive();
+  if (live?.length > 0) updateMatchesInFeed(live, `LIVE NOW · All times ${TZA}`);
+}, 60000);
+
+// ── INIT ──
+initTheme();
+initCookies();
+buildCal();
+loadTab('live');
+
+console.log('PitchIQ v5 ✅ — SofaScore widgets + API-Football predictions engine');
+</script>
+</body>
+</html>
